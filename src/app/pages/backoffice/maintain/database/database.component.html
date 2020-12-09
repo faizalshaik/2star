@@ -1,0 +1,83 @@
+<h5>Maintain DB</h5>
+<div class="card">
+    <div class="card-header page-card-header">
+        <h6 class="mt-1">Fixtures</h6>
+    </div>
+    <table class="table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Sport</th>
+                <th>Fixtures Count</th>
+                <th>Oldest</th>
+                <th>Latest</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cnt of sports_fixture_counts;">
+                <td>{{cnt.name}}</td>
+                <td>{{cnt.value}}</td>
+                <td>{{cnt.oldest}}</td>
+                <td>{{cnt.latest}}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger mr-1" (click)="on_clear_fixtures(cnt.id, modalContent)">
+                        <i class="fa fa-trash mr-1"></i> Clear
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header page-card-header">
+        <h6 class="mt-1">Bets</h6>
+    </div>
+    <table class="table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Bets Count</th>
+                <th>Oldest</th>
+                <th>Latest</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="bet_count">
+                <td>{{bet_count.value}}</td>
+                <td>{{bet_count.oldest}}</td>
+                <td>{{bet_count.latest}}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger mr-1" (click)="on_clear_bets(modalContent)">
+                        <i class="fa fa-trash mr-1"></i> Clear
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<ng-template #modalContent>
+    <div class="modal-body bg-gray">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Select Date to Clear</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="text-muted">Note: You will clear old fixtures before this day!</p>
+                    <div class="form-group">
+                        <label>Base Date</label>
+                        <input class="form-control" type="datetime-local" formControlName="date">
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button [disabled]="!form.valid" class="btn btn-success mr-1 w-100p" type="submit">
+                        <span>Confirm</span>
+                    </button>
+                    <button type="button" class="btn btn-danger w-100p" (click)="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

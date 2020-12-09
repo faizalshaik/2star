@@ -1,0 +1,207 @@
+<div class="row">
+    <button id="login_button" class="btn" hidden (click)="on_open_login(loginModalContent)">Login</button>
+    <button id="register_button" class="btn" hidden (click)="on_open_register(registerModalContent)">Register</button>
+    <button id="logout_button" class="btn" hidden (click)="on_logout()">Logout</button>
+</div>
+
+<div class="wrapper-inner" [ngClass]="{ 'vertical-menu-tooltip-place': (settings.theme.menuType == 'mini' && settings.theme.menu == 'vertical'),
+                                        'horizontal-menu-tooltip-place': (settings.theme.menuType == 'mini' && settings.theme.menu == 'horizontal') }">
+
+    <app-header></app-header>
+
+    <div class="d-flex h-100" [ngClass]="{'flex-row': settings.theme.menu == 'vertical', 'flex-column': settings.theme.menu != 'vertical'}">
+        <app-sidebar *ngIf="settings.theme.menu == 'vertical'"></app-sidebar>
+        <div class="main-content">
+            <app-side-chat></app-side-chat>
+            <!-- <app-breadcrumb></app-breadcrumb>             -->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+</div>
+<app-footer></app-footer>
+<app-back-top position="200"></app-back-top>
+
+
+<ng-template #loginModalContent>
+    <div class="d-flex justify-content-center align-items-center w-100 h-100 login-container">
+        <div class="card border-0 box-shadow rounded-0">
+            <div class="card-header d-flex justify-content-center align-items-center border-0 box-shadow">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+            </div>
+            <div class="card-body text-center pb-1">
+                <h2>Member login</h2>
+                <a (click)="on_open_register(registerModalContent)" style="cursor: pointer;" class="transition text-primary">Don't have an account? Sign up now!</a>
+
+                <form [formGroup]="form_login" class="text-left mt-4">
+                    <div class="form-group">
+                        <input [formControl]="email_login" class="form-control validation-field" placeholder="Email" type="text" (keydown.enter)="on_enter_login()">
+                        <small class="text-danger" *ngIf="form_login.get('email_login').touched && form_login.get('email_login').hasError('required')">Email is required</small>
+                        <!-- <small class="text-danger" *ngIf="form_login.get('email_login').touched && form_login.get('email_login').hasError('email')">Invalid email address</small> -->
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="password_login" class="form-control validation-field" placeholder="Password" type="password" (keydown.enter)="on_enter_login()">
+                        <small class="text-danger" *ngIf="form_login.get('password_login').touched && form_login.get('password_login').hasError('required')">Password is required</small>
+                        <!-- <small class="text-danger" *ngIf="form_login.get('password_login').touched && form_login.get('password_login').hasError('minlength')">Password isn't long enough, minimum of 6 characters</small> -->
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="login-checkbox">
+                            <label class="custom-control-label" for="login-checkbox">Keep me signed in.</label>
+                        </div>
+                        <a class="transition pull-right" href="javascript:void(0);">Forgot password?</a>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="!form_login.valid" class="btn btn-block btn-warning" type="button" (click)="on_login(form_login.value)">Sign in</button>
+                    </div>
+                    <div *ngIf="login_error" class="mt-2 alert alert-danger fade show" role="alert">
+                        <button aria-label="Close" class="close" type="button" (click)="login_error=false">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Login Failed</strong> {{login_error_message}}
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-transparent">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square-o fa-stack-2x"></i>
+                            <i class="fa fa-facebook fa-stack-1x"></i>
+                        </span>
+                    </li>
+                    <li class="list-inline-item">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square-o fa-stack-2x"></i>
+                            <i class="fa fa-twitter fa-stack-1x"></i>
+                        </span>
+                    </li>
+                    <li class="list-inline-item">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square-o fa-stack-2x"></i>
+                            <i class="fa fa-google fa-stack-1x"></i>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #registerModalContent>
+    <div class="d-flex justify-content-center align-items-center w-100 h-100 register-container">
+        <div class="card border-0 box-shadow rounded-0">
+            <div class="card-header d-flex justify-content-center align-items-center border-0 box-shadow">
+                <i class="fa fa-registered" aria-hidden="true"></i>
+            </div>
+            <div class="card-body text-center pb-1">
+                <h2>Register member</h2>
+                <a style="cursor: pointer;" (click)="on_open_login(loginModalContent)" class="transition text-primary">Already have an account? Sign in!</a>
+
+                <form [formGroup]="form_register" (ngSubmit)="onSubmit(form_register.value)" class="text-left mt-4">
+                    <div class="form-group">
+                        <input [formControl]="name_register" class="form-control validation-field" placeholder="Full Name" type="text">
+                        <small class="text-danger" *ngIf="form_register.get('name_register').touched">
+                            <span *ngIf="form_register.get('name_register').hasError('required')">Full Name is required</span>
+                            <span *ngIf="form_register.get('name_register').hasError('minlength')">Minimum of 3 characters</span>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="email_register" class="form-control validation-field" placeholder="Email" type="text">
+                        <small class="text-danger" *ngIf="form_register.get('email_register').touched">
+                            <span *ngIf="form_register.get('email_register').hasError('required')">Email is required</span>
+                            <span *ngIf="form_register.get('email_register').hasError('invalidEmail')">Invalid email address</span>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="password_register" class="form-control validation-field" placeholder="Password" type="password" minlength="6">
+                        <small class="text-danger" *ngIf="form_register.get('password_register').touched">
+                            <span *ngIf="form_register.get('password_register').hasError('required')">Password is required</span>
+                            <span *ngIf="form_register.get('password_register').hasError('minlength')">Password isn't long enough, minimum of 6 characters</span>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="confirmPassword_register" class="form-control validation-field" placeholder="Confirm Password" type="password">
+                        <small class="text-danger" *ngIf="form_register.get('confirmPassword_register').touched">
+                            <span *ngIf="form_register.get('confirmPassword_register').hasError('required')">Confirm Password is required</span>
+                            <span *ngIf="form_register.get('confirmPassword_register').hasError('mismatchedPasswords')">Passwords do not match</span>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <p class="terms">By creating an account, you agree our <a class="transition terms" href="javascript:void(0);">Terms & Privacy Policy</a></p>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="!form_register.valid" class="btn btn-block btn-warning" type="button" (click)="on_register(form_register.value)">Sign up</button>
+                    </div>
+
+                    <div *ngIf="register_error_message !=''" class="mt-2 alert alert-danger fade show" [ngClass]="{ 'alert-danger': register_error, 'alert-info': !register_error}" role="alert">
+                        <button aria-label="Close" class="close" type="button" (click)="register_error_message=''">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong *ngIf="register_error">Register Failed</strong>
+                        <strong *ngIf="!register_error">Register Success</strong> {{register_error_message}}
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+<!-- <div class="settings" [ngClass]="{'show': showSetting}">
+    <button class="btn btn-default toggle" (click)="showSetting=!showSetting"><i class="fa fa-spin fa-gear"></i></button>
+    <div class="card">
+        <div class="card-header text-center">
+            Settings
+        </div>
+        <div class="card-body mt-2">
+            <h6>Choose menu</h6>
+            <div class="form-group">
+                <div *ngFor="let menu of menus; let i = index;" class="custom-control custom-radio">
+                    <input [attr.id]="'radio-'+i" type="radio" name="menus" class="custom-control-input radio-dark-gray" (change)="chooseMenu(menu)" [checked]="menu === menuOption" [value]="menu">
+                    <label [attr.for]="'radio-'+i" class="custom-control-label text-capitalize">{{menu}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h6>Choose menu type</h6>
+            <div class="form-group">
+                <div *ngFor="let menuType of menuTypes; let i = index;" class="custom-control custom-radio">
+                    <input [attr.id]="'menuType-'+i" type="radio" name="menuTypes" class="custom-control-input radio-dark-gray" (change)="chooseMenuType(menuType)" [checked]="menuType === menuTypeOption" [value]="menuType">
+                    <label [attr.for]="'menuType-'+i" class="custom-control-label text-capitalize">{{menuType}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="card-body mb-3">
+            <h6>Choose theme skin</h6>
+            <div class="theme light" (click)="changeTheme('light')"></div>
+            <div class="theme dark" (click)="changeTheme('dark')"></div>
+            <div class="theme blue" (click)="changeTheme('blue')"></div>
+            <div class="theme green" (click)="changeTheme('green')"></div>
+            <div class="theme combined" (click)="changeTheme('combined')"></div>
+            <div class="theme purple" (click)="changeTheme('purple')"></div>
+            <div class="theme orange" (click)="changeTheme('orange')"></div>
+            <div class="theme brown" (click)="changeTheme('brown')"></div>
+            <div class="theme grey" (click)="changeTheme('grey')"></div>
+            <div class="theme pink" (click)="changeTheme('pink')"></div>
+        </div>
+        <div class="card-body mb-2">
+            <h6>Other theme options</h6>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input checkbox-dark-gray" id="navbarIsFixed" [checked]="settings.theme.navbarIsFixed" (change)="settings.theme.navbarIsFixed = !settings.theme.navbarIsFixed">
+                <label class="custom-control-label" for="navbarIsFixed">Fixed header</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input checkbox-dark-gray" id="sidebarIsFixed" [checked]="settings.theme.sidebarIsFixed" (change)="settings.theme.sidebarIsFixed = !settings.theme.sidebarIsFixed">
+                <label class="custom-control-label" for="sidebarIsFixed">Fixed sidebar</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input checkbox-dark-gray" id="footerIsFixed" [checked]="settings.theme.footerIsFixed" (change)="settings.theme.footerIsFixed = !settings.theme.footerIsFixed">
+                <label class="custom-control-label" for="footerIsFixed">Fixed footer</label>
+            </div>
+        </div>
+    </div>
+</div> -->

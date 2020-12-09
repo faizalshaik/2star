@@ -1,0 +1,220 @@
+<div class="row">
+    <div class="col-12 p-0">
+        <h6>Results</h6>
+        <div class="card card-warning  border-0 box-shadow">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Filter</h6>
+            </div>
+            <div class="card-body bg-white p-1">
+                <div class="row">
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">Played on:</td>
+                                    <td width="60%"><input class="" type="datetime-local" [(ngModel)]="date_from"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm  mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">To:</td>
+                                    <td width="60%"><input class="" type="datetime-local" [(ngModel)]="date_to"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">View From:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="view_from"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">To N:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="view_count"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">Sport:</td>
+                                    <td width="60%">
+                                        <select [(ngModel)]="sport">
+                                            <option [value]="0">All</option>
+                                            <option *ngFor="let sport of sports" [value]="sport.id">{{sport.name}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">Qbet:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="qbet"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <button class="btn btn-outline-info btn-sm mr-2" (click)="on_search()">
+                            <i class="fa fa-search mr-1"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-warning  border-0 box-shadow mt-2">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Match List</h6>
+            </div>
+            <div class="card-body bg-white p-0">
+
+                <div class="bg-white text-center mt-1">
+                    <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="6"></pagination-controls>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Programming</th>
+                                <th>Match</th>
+                                <th>DateTime</th>
+                                <th>HT</th>
+                                <th>ST</th>
+                                <th>FT</th>
+                                <th width="20px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let event of events | paginate: { itemsPerPage: 10, currentPage: p }">
+                            <tr>
+                                <td>
+                                    <span class="mr-1"><app-sport-icon [key]="event.sport_key"></app-sport-icon></span> {{event.country}} - {{event.league}}
+                                </td>
+                                <td>({{event.qbet}}) {{event.home_team}} - {{event.away_team}}</td>
+                                <td>{{datetimeService.format(event.datetime)}}</td>
+                                <td>{{event.ht_result[0]}} : {{event.ht_result[1]}}</td>
+                                <td>{{event.st_result[0]}} : {{event.st_result[1]}}</td>
+                                <td>{{event.ft_result[0]}} : {{event.ft_result[1]}}</td>
+                                <td width="20px">
+                                    <button class="btn btn-sm btn-info" (click)="on_select_event(event)">
+                                        <i class="fa" [ngClass]="{'fa-minus': selected_event==event, 'fa-plus': selected_event!=event}"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="selected_event==event">
+                                <td colspan="7">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                                                    <b>Goals</b>
+                                                </div>
+                                                <table class="table table-hover table-sm table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Competitor</th>
+                                                            <th>Player</th>
+                                                            <th>Time</th>
+                                                            <th>Type</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let goal of event.goals">
+                                                            <td>{{goal.competitor}}</td>
+                                                            <td>{{goal.player}}</td>
+                                                            <td>{{goal.time}}</td>
+                                                            <td>{{goal.type}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                                                    <b>Cards</b>
+                                                </div>
+                                                <table class="table table-hover table-sm table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Competitor</th>
+                                                            <th>Player</th>
+                                                            <th>Time</th>
+                                                            <th>Type</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let card of event.cards">
+                                                            <td>{{card.competitor}}</td>
+                                                            <td>{{card.player}}</td>
+                                                            <td>{{card.time}}</td>
+                                                            <td><span class="badge badge-pill" [ngClass]="{'badge-warning': card.type=='yellow', 'badge-danger': card.type=='red'}">{{card.type}}</span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                                                    <b>Conners</b>
+                                                </div>
+                                                <table class="table table-hover table-sm table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Competitor</th>
+                                                            <th>Half Time</th>
+                                                            <th>Final Score</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Home</td>
+                                                            <td></td>
+                                                            <td>{{event.conners[0]}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Away</td>
+                                                            <td></td>
+                                                            <td>{{event.conners[1]}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- <ng2-smart-table class="table table-hover" [settings]="settings" [source]="matches"></ng2-smart-table> -->
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

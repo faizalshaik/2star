@@ -1,0 +1,213 @@
+<div class="row">
+    <div class="col-12 p-0">
+        <h6>Bets Report</h6>
+        <div class="card card-warning  border-0 box-shadow">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Filter</h6>
+            </div>
+            <div class="card-body bg-white p-1">
+                <div class="row">
+                    <div class="col-md-5">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">From:</td>
+                                    <td width="60%"><input class="" type="datetime-local" [(ngModel)]="date_from"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-5">
+                        <table class="table table-sm  mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">To:</td>
+                                    <td width="60%"><input class="" type="datetime-local" [(ngModel)]="date_to"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn-sm btn-info" (click)="expanded_filter=!expanded_filter;">
+                            <i *ngIf="!expanded_filter" class="fa fa-plus mr-1"></i>
+                            <i *ngIf="expanded_filter" class="fa fa-minus mr-1"></i>
+                            Other options</button>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="expanded_filter">
+                    <div class="col-md-5 mb-1">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">BetId:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="betid"></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-right">Qbet:</td>
+                                    <td><input type="number" [(ngModel)]="qbet"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">Amount(min):</td>
+                                    <td><input type="number" [(ngModel)]="amount_min"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">Payout(min):</td>
+                                    <td><input type="number" [(ngModel)]="payout_min"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-5 mb-1">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">Option:</td>
+                                    <td width="60%">
+                                        <select [(ngModel)]="option">
+                                            <option [value]="0">Any</option>
+                                            <option *ngFor="let op of options" [value]="op.id">{{op.name}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-right">Type of bets:</td>
+                                    <td>
+                                        <select [(ngModel)]="type">
+                                            <option value="">Any</option>
+                                            <option value="Direct">Direct</option>
+                                            <option value="Permutation">Permutation</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">Multiplicity:</td>
+                                    <td>
+                                        <input type="number" class="w-50p" [(ngModel)]="events_min"> ~
+                                        <input type="number" class="w-50p" [(ngModel)]="events_max">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-2 mb-1">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox ml-5">
+                                            <input class="custom-control-input checkbox-dark-gray" [(ngModel)]="state_void" id="checkbox_void" type="checkbox"><label class="custom-control-label" for="checkbox_void">Void</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox ml-5">
+                                            <input class="ml-4 custom-control-input checkbox-primary" [(ngModel)]="state_in_progress" id="checkbox_in_progress" type="checkbox"><label class="custom-control-label" for="checkbox_in_progress">In progress</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox ml-5">
+                                            <input class="ml-4 custom-control-input checkbox-success" [(ngModel)]="state_won" id="checkbox_won" type="checkbox"><label class="custom-control-label" for="checkbox_won">Won</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox ml-5">
+                                            <input class="ml-4 custom-control-input checkbox-danger" [(ngModel)]="state_lost" id="checkbox_lost" type="checkbox"><label class="custom-control-label" for="checkbox_lost">Lost</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">View From:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="view_from"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-5">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">To N:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="view_count"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn-outline-info btn-sm mr-2" (click)="on_search()">
+                            <i class="fa fa-search mr-1"></i>Search</button>
+                        <button class="btn btn-outline-danger btn-sm mr-2" (click)="on_delete()">
+                            <i class="fa fa-trash mr-1"></i>Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-warning  border-0 box-shadow mt-2">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Results</h6>
+            </div>
+            <div class="card-body bg-white p-0">
+                <div class="table-responsive">
+                    <ng2-smart-table class="table table-hover" [settings]="settings" [source]="days"></ng2-smart-table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card card-warning  border-0 box-shadow mt-2">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Total Result</h6>
+            </div>
+            <div class="card-body bg-white p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped w-100">
+                        <tbody *ngIf="summary">
+                            <tr>
+                                <td width="50%" class="text-right">Total played:</td>
+                                <td class="text-center">₦ {{summary[0]}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Max winnings(In progress)</td>
+                                <td class="text-center">₦ {{summary[1]}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Void:</td>
+                                <td class="text-center">₦ {{summary[2]}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Total won:</td>
+                                <td class="text-center">₦ {{summary[3]}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Net:</td>
+                                <td class="text-center">₦ {{summary[4]}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

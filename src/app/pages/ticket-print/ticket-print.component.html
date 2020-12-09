@@ -1,0 +1,132 @@
+<div class="card border-0 box-shadow rounded-0">
+    <div class="card-header text-center">
+        <h6>Ticket detail - {{bet.bet_id}}</h6>
+        <div class="widget-controls">
+            <i class="fa fa-times" style="cursor: pointer;" (click)="on_close()"></i>
+        </div>
+    </div>
+    <div class="card-body p-1">
+        <div class="d-flex justify-content-center">
+            <div style="border: 2px solid; width:400px;" class="p-2" id="ticket-content">
+                <div class="text-center">
+                    <h2><i class="fa fa-star-half-o mr-1"></i>bet2star<i class="ml-1 fa fa-star-half-o"></i></h2>
+                    <!-- <h2>bet2star</h2> -->
+                    <span style="color: black;">BetTwoStar</span>
+                    <span class="form-control" style="color: black;">Player: {{userInfo.login}} ({{userInfo.sur_name}} {{userInfo.name}} )</span>
+                </div>
+                <div *ngFor="let result of bet_results" class="mb-1" style="border-bottom: dotted #0000006b;">
+                    <b style="color: black;">{{result.sport.name}} > {{result.fixture.league}} > {{result.fixture.country}}</b>
+                    <div class="d-flex justify-content-between">
+                        <span style="color: black;">{{result.fixture.qbet}}</span>
+                        <b style="color: black;">{{result.fixture.home_team}} - {{result.fixture.away_team}}
+                            <i class="ml-2 fa" [ngClass]="{'fa-spinner text-primary': result.state=='none', 
+                                        'fa-close text-danger': result.state=='lost',
+                                        'fa-flag text-success': result.state=='won'}"></i>
+                            <!-- <span class="ml-2">[{{result.state}}]</span> -->
+                        </b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span style="color: black;">{{datetimeService.format(result.fixture.date + ' ' + result.fixture.time)}}</span>
+                        <span style="color: black;">Sign:<b class="ml-1"  style="color: black;">{{result.option.name}}</b>({{result.option.group}})</span>
+                        <span style="color: black;">Odd:<b class="ml-1"  style="color: black;">{{result.prize}}</b></span>
+                    </div>
+                </div>
+                <table class="table table-sm table-bordered">
+                    <thead hidden>
+                        <tr>
+                            <th width="50%"></th>
+                            <th width="50%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">N events</span>
+                                    <b style="color: black;">{{bet.event_count}}</b>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">Under</span>
+                                    <b style="color: black;">{{bet.under}}</b>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">BetID</span>
+                                    <b style="color: black;">{{bet.bet_id}}</b>
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                <b style="color: black;">{{datetimeService.format(bet.insert_at)}}</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">Type</span>
+                                    <b style="color: black;">{{bet.type}}</b>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">Week</span>
+                                    <b style="color: black;">{{bet.week}} ({{bet.year}})</b>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">Amount</span>
+                                    <b style="color: black;">₦ {{bet.amount}}</b>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="d-flex justify-content-between">
+                                    <span *ngIf="bet.type=='Direct'" style="color: black;">Possible Win</span>
+                                    <span *ngIf="bet.type!='Direct'" style="color: black;">Max Win</span>
+                                    <b style="color: black;">₦ {{bet.max_win}}</b>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">Win</span>
+                                    <b style="color: black;">₦ {{bet.won_amount}}</b>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="d-flex justify-content-between">
+                                    <span style="color: black;">Bonus</span>
+                                    <b style="color: black;">{{bet.bonus_percent}} %</b>
+                                    <b style="color: black;">₦ {{bet.bonus}}</b>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="d-flex justify-content-between">
+                                    <b style="color: black;">Total win</b>
+                                    <b style="color: black;">₦ {{bet.total_win}}</b>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center">
+        <button class="btn btn-success" (click)="on_print_ticket()"><i class="fa fa-print mr-1"></i>Print</button>
+    </div>
+</div>

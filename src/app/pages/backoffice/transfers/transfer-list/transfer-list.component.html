@@ -1,0 +1,170 @@
+<h5>Transfer List</h5>
+<div class="card  card-warning   border-0 box-shadow">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 calss="mt-1">Filter</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <table class="table-sm table-hover table-striped w-100">
+            <tbody>
+                <tr>
+                    <td class="text-right" width="12%">Date from:</td>
+                    <td width="30%"><input class="" type="date" [(ngModel)]="date_from"></td>
+                    <td width="12%" class="text-right">to:</td>
+                    <td width="30%"><input class="" type="date" [(ngModel)]="date_to"></td>
+                    <td width="16%">
+                        <button class="btn btn-sm btn-info" (click)="expanded_filter=!expanded_filter;">
+                        <i *ngIf="!expanded_filter" class="fa fa-plus mr-1"></i>
+                        <i *ngIf="expanded_filter" class="fa fa-minus mr-1"></i>
+                        Other options</button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Move Type:</td>
+                    <td>
+                        <select [(ngModel)]="move_type">
+                            <option [value]="0">Any</option>
+                            <!-- <option value="op.id">{{op.name}}</option> -->
+                        </select>
+                    </td>
+                    <td class="text-right">Operator:</td>
+                    <td>
+                        <select [(ngModel)]="operator" (change)="on_change_operator()">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let op of operators" [value]="op.id">{{op.login}}</option>
+                    </select>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input checkbox-primary" [(ngModel)]="state_transfers" id="checkbox_transfers" type="checkbox"><label class="custom-control-label" for="checkbox_transfers">Transfers</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Commission Type:</td>
+                    <td>
+                        <select [(ngModel)]="commission_type">
+                            <option [value]="0">Any</option>
+                        </select>
+                    </td>
+                    <td class="text-right">Agency:</td>
+                    <td>
+                        <select [(ngModel)]="agency" (change)="on_change_agency()">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let ag of agencies" [value]="ag.id">{{ag.login}}</option>
+                    </select>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input checkbox-primary" [(ngModel)]="state_admin" id="checkbox_admin" type="checkbox"><label class="custom-control-label" for="checkbox_admin">Admin</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Search by user:</td>
+                    <td>
+                        <input type="text" [(ngModel)]="username">
+                    </td>
+                    <td class="text-right">User:</td>
+                    <td>
+                        <select [(ngModel)]="user">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let usr of users" [value]="usr.id">{{usr.login}}</option>
+                    </select>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input checkbox-primary" [(ngModel)]="state_subnet" id="checkbox_subnet" type="checkbox"><label class="custom-control-label" for="checkbox_subnet">Include subnet</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="text-right" width="12%">From N:</td>
+                    <td><input class="" type="number" [(ngModel)]="view_from"></td>
+                    <td class="text-right">N Movements:</td>
+                    <td><input class="" type="number" [(ngModel)]="view_count"></td>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input checkbox-primary" [(ngModel)]="state_bydate" id="checkbox_bydate" type="checkbox"><label class="custom-control-label" for="checkbox_bydate">Show by date</label>
+                        </div>
+                    </td>
+                </tr>
+
+
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center mb-2">
+            <button class="btn btn-outline-info btn-sm mr-2" (click)="on_search()">
+                <i class="fa fa-search mr-1"></i>Search
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="card card-warning  border-0 box-shadow mt-2">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 calss="mt-1">Results</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <div class="table-responsive">
+            <ng2-smart-table class="table table-hover" [settings]="settings" [source]="transfers"></ng2-smart-table>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="summary" class="card card-warning  border-0 box-shadow mt-2">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 calss="mt-1">Total Result</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped w-100">
+                <tbody *ngIf="summary">
+                    <tr>
+                        <td width="50%" class="text-right">Total paid</td>
+                        <td class="text-center">₦ {{summary.given}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Total received</td>
+                        <td class="text-center">₦ {{summary.received}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Total net</td>
+                        <td class="text-center">₦ {{summary.received - summary.given}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="state_bydate && summary_date" class="card card-warning  border-0 box-shadow mt-2">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 calss="mt-1">Date Totals</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped w-100">
+                <tbody *ngIf="summary">
+                    <tr>
+                        <td width="50%" class="text-right">Total paid</td>
+                        <td class="text-center">₦ {{summary_date.given}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Total received</td>
+                        <td class="text-center">₦ {{summary_date.received}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Total net</td>
+                        <td class="text-center">₦ {{summary_date.received - summary_date.given}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

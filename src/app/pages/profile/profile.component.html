@@ -1,0 +1,511 @@
+<div class="row">
+    <div class="col-md-4 pl-1 pr-1">
+        <div class="card border-0 box-shadow">
+            <input type="file" (change)="fileChange(input)" #input class="img-upload-btn" accept="image/x-png,image/gif,image/jpeg" />
+            <button class="btn btn-info btn-block rounded-0" type="button">
+                <span *ngIf="!image"><i class="fa fa-upload"></i> Select Image... </span>
+                <span *ngIf="image"><i class="fa fa-refresh"></i> Change Image... </span>
+            </button>
+
+            <div class="image-wrapper">
+                <img [attr.src]="link" *ngIf="link" width="100%">
+                <img [attr.src]="userInfo.profile_img" *ngIf="link==''" width="100%">
+            </div>
+            <button *ngIf="image" class="btn btn-info btn-block rounded-0" type="button" (click)="on_save_profile_img()">
+                <span><i class="fa fa-refresh"></i> Save Profile Image </span>
+            </button>
+
+            <!-- <img class="card-img-top w-100" src="assets/img/users/user-orig.jpg" alt="user"> -->
+            <div class="card-body">
+                <h4 class="card-title text-center">{{userInfo.surname}} {{userInfo.name}}</h4>
+                <h6 class="card-title text-center text-info">Since: {{userInfo.created_at}}</h6>
+                <div class="dropdown-divider w-100"></div>
+                <div class="row">
+                    <div class="col-md-4 text-left">Gender:</div>
+                    <div class="col-md-8 text-right"><strong class="d-inline-block">{{userInfo.gender}}</strong></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-left">Login:</div>
+                    <div class="col-md-8 text-right"><strong class="d-inline-block">{{userInfo.login}}</strong></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-left">Email:</div>
+                    <div class="col-md-8 text-right"><strong class="d-inline-block">{{userInfo.email}}</strong></div>
+                </div>
+
+                <div class="dropdown-divider w-100"></div>
+
+                <div class="row">
+                    <div class="col-md-4 text-left">Phone:</div>
+                    <div class="col-md-8 text-right"><strong class="d-inline-block">{{userInfo.phone}}</strong></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-left">Address:</div>
+                    <div class="col-md-8 text-right"><strong class="d-inline-block">{{userInfo.address}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 pl-1 pr-1">
+        <div class="card border-0 box-shadow card-warning">
+            <div class="card-header">
+                <h6><i class="fa fa-key mr-1"></i>Change Password</h6>
+            </div>
+            <div class="card-body bg-white">
+                <label class="mt-1">Old Password</label>
+                <input class="form-control" type="password" [(ngModel)]="old_password" />
+                <label class="mt-1">New Password (min length 6)</label>
+                <input class="form-control" type="password" [(ngModel)]="new_password" />
+                <label class="mt-1">Confirm Password</label>
+                <input class="form-control" type="password" [(ngModel)]="new_password_confirm" />
+                <div class="text-center mt-1">
+                    <button class="btn btn-info" (click)="on_change_password()" [disabled]="old_password.length==0 || 6 > new_password.length || new_password!=new_password_confirm">Change Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 pl-1 pr-1">
+        <div class="card border-0 box-shadow card-warning">
+            <div class="card-header">
+                <h6><i class="fa fa-money mr-1"></i>Deposite</h6>
+            </div>
+            <div class="card-body bg-white">
+                <div class="text-center">
+                    <img class="w-200p" src="assets/img/profile/bank.jpeg">
+                </div>
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4 text-right">Bank name:</div>
+                        <div class="col-md-8"><b>Diamond bank plc</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Owner name:</div>
+                        <div class="col-md-8"><b>Josystar company Nigeria Limited</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Account number:</div>
+                        <div class="col-md-8"><b>0023773782</b></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4 text-right">Bank name:</div>
+                        <div class="col-md-8"><b>Eco Bank plc</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Owner name:</div>
+                        <div class="col-md-8"><b>Josystar company Nigeria Limited</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Account number:</div>
+                        <div class="col-md-8"><b>2100203535</b></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4 text-right">Bank name:</div>
+                        <div class="col-md-8"><b>Fidelity Bank plc</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Owner name:</div>
+                        <div class="col-md-8"><b>Josystar company nig limited</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Account number:</div>
+                        <div class="col-md-8"><b>4011259722</b></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4 text-right">Bank name:</div>
+                        <div class="col-md-8"><b>Zenith Bank plc</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Owner name:</div>
+                        <div class="col-md-8"><b>Josystar company Nigeria limited</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">Account number:</div>
+                        <div class="col-md-8"><b>1016145484</b></div>
+                    </div>
+                </div>
+
+
+                <label class="mt-1">Please input amount</label>
+                <input class="form-control" type="number" [(ngModel)]="deposite_amount" />
+                <div class="text-center mt-1">
+                    <button class="btn btn-info btn-lg" (click)="on_start_deposite()" [disabled]="0 >= deposite_amount ">Deposite via PayStack</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="col-md-4 pl-1 pr-1">
+        <div class="card border-0 box-shadow card-warning">
+            <div class="card-header">
+                <h6>Activity</h6>
+            </div>
+            <div class="card-body bg-white p-2">
+                <div class="row mt-2">
+                    <div class="col-md-6 text-center">
+                        <span class="mr-1">From:</span>
+                        <input type="date" [(ngModel)]="from" />
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <span class="mr-4">To:</span>
+                        <input type="date" [(ngModel)]="to" />
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3 text-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" [(ngModel)]="void" id="checkboxVoid">
+                            <label class="custom-control-label" for="checkboxVoid">Void</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input checkbox-danger" [(ngModel)]="lost" id="checkboxLost">
+                            <label class="custom-control-label" for="checkboxLost">Lost</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input checkbox-success" [(ngModel)]="won" id="checkboxWon">
+                            <label class="custom-control-label" for="checkboxWon">Won</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input checkbox-primary" [(ngModel)]="inprogress" id="checkboxInProgress">
+                            <label class="custom-control-label" for="checkboxInProgress">InProgress</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-around mt-2">
+                    <button class="btn btn-info w-100p" (click)="on_get_bet_list()"><i class="fa fa-search mr-1"></i>Search</button>
+                    <button class="btn btn-success w-100p"><i class="fa fa-print mr-1"></i>Print</button>
+                </div>
+
+                <div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-white text-center">
+                                <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="10"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-1" style="border:solid 1px; cursor: pointer;" (click)="on_view_bet(bet, betResultModalContent)" *ngFor="let bet of bets | paginate: { itemsPerPage: 10, currentPage: p }">
+                        <div class="d-flex justify-content-between">
+                            <label class="ml-2">{{datetimeService.format(bet.insert_at)}} W: <b>{{bet.week}}</b></label>
+                            <label>
+                              <b>{{bet.bet_id}}</b>
+                              <i class="fa ml-2 mr-2" [ngClass]="{'fa-trash-o text-grey': bet.status==2, 
+                                                                'fa-spinner text-primary': bet.bet_result=='none', 
+                                                                'fa-close text-danger': bet.bet_result=='lost',
+                                                                'fa-flag text-success': bet.bet_result=='won'}"></i>
+                            </label>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <label><span class="ml-2 mr-2" >Events:</span><b>{{bet.event_count}}</b></label>
+                            <label><span class="mr-2">Under:</span><b>{{bet.under}}</b></label>
+                            <label><span class="mr-2">Played:</span><b class="mr-2">₦ {{bet.amount}}</b></label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<ng-template #ticketModalContent>
+    <div class="card border-0 box-shadow rounded-0">
+        <div class="card-header text-center">
+            <h6>Ticket detail - {{selected_bet.bet_id}}</h6>
+            <div class="widget-controls">
+                <i class="fa fa-times" style="cursor: pointer;" (click)="modalRef.close()"></i>
+            </div>
+        </div>
+        <div class="card-body p-1">
+            <div class="d-flex justify-content-center">
+                <div style="border: 2px solid; width:400px;" class="p-2" id="ticket-content">
+                    <div class="text-center">
+                        <h2><i class="fa fa-star-half-o mr-1"></i>bet2star<i class="ml-1 fa fa-star-half-o"></i></h2>
+                        <!-- <h2>bet2star</h2> -->
+                        <span style="color: black;">BetTwoStar</span>
+                        <span class="form-control" style="color: black;">Player: {{userInfo.login}} ({{userInfo.sur_name}} {{userInfo.name}} )</span>
+                    </div>
+                    <div *ngFor="let result of selected_bet_results" class="mb-1" style="border-bottom: dotted #0000006b;">
+                        <b style="color: black;">{{result.sport.name}} > {{result.fixture.league}} > {{result.fixture.country}}</b>
+                        <div class="d-flex justify-content-between">
+                            <span style="color: black;">{{result.fixture.qbet}}</span>
+                            <b style="color: black;">{{result.fixture.home_team}} - {{result.fixture.away_team}}
+                              <i class="ml-2 fa" [ngClass]="{'fa-spinner text-primary': result.state=='none', 
+                                            'fa-close text-danger': result.state=='lost',
+                                            'fa-flag text-success': result.state=='won'}"></i>
+                                <!-- <span class="ml-2">[{{result.state}}]</span> -->
+                            </b>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span style="color: black;">{{datetimeService.format(result.fixture.date + ' ' + result.fixture.time)}}</span>
+                            <span style="color: black;">Sign:<b class="ml-1"  style="color: black;">{{result.option.name}}</b>({{result.option.group}})</span>
+                            <span style="color: black;">Odd:<b class="ml-1"  style="color: black;">{{result.prize}}</b></span>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-bordered">
+                        <thead hidden>
+                            <tr>
+                                <th width="50%"></th>
+                                <th width="50%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">N events</span>
+                                        <b style="color: black;">{{selected_bet.event_count}}</b>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">Under</span>
+                                        <b style="color: black;">{{selected_bet.under}}</b>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">BetID</span>
+                                        <b style="color: black;">{{selected_bet.bet_id}}</b>
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    <b style="color: black;">{{datetimeService.format(selected_bet.insert_at)}}</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">Type</span>
+                                        <b style="color: black;">{{selected_bet.type}}</b>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">Week</span>
+                                        <b style="color: black;">{{selected_bet.week}} ({{selected_bet.year}})</b>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">Amount</span>
+                                        <b style="color: black;">₦ {{selected_bet.amount}}</b>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="d-flex justify-content-between">
+                                        <span *ngIf="selected_bet.type=='Direct'" style="color: black;">Possible Win</span>
+                                        <span *ngIf="selected_bet.type!='Direct'" style="color: black;">Max Win</span>
+                                        <b style="color: black;">₦ {{selected_bet.max_win}}</b>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">Win</span>
+                                        <b style="color: black;">₦ {{selected_bet.won_amount}}</b>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="d-flex justify-content-between">
+                                        <span style="color: black;">Bonus</span>
+                                        <b style="color: black;">{{selected_bet.bonus_percent}} %</b>
+                                        <b style="color: black;">₦ {{selected_bet.bonus}}</b>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="d-flex justify-content-between">
+                                        <b style="color: black;">Total win</b>
+                                        <b style="color: black;">₦ {{selected_bet.total_win}}</b>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <button class="btn btn-success" (click)="on_print_ticket()"><i class="fa fa-print mr-1"></i>Print</button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #betResultModalContent>
+    <div class="card border-0 box-shadow rounded-0">
+        <div class="card-header text-center">
+            <h6>BET DETAIL - {{selected_bet.bet_id}}</h6>
+            <div class="widget-controls">
+                <i class="fa fa-times" style="cursor: pointer;" (click)="modalRef.close()"></i>
+            </div>
+        </div>
+        <div class="card-body p-1">
+            <div style="height: 440px; overflow-y: scroll; border: 1px solid rgba(157, 157, 157, 0.7);">
+                <div class="row">
+                    <div class="col-md-6 pr-1">
+                        <table class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th>Ticket Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Events in coupon:</span>
+                                            <b>{{selected_bet.event_count}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Amount:</span>
+                                            <b>{{selected_bet.amount}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Under:</span>
+                                            <b>{{selected_bet.under}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Win:</span>
+                                            <b>{{selected_bet.won_amount}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Bonus:</span>
+                                            <b>0</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Total win:</span>
+                                            <b>{{selected_bet.total_win}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6 pl-1">
+                        <table class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th>Detail Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Result:</span>
+                                            <b *ngIf="selected_bet.status==2">Void</b>
+                                            <b *ngIf="selected_bet.bet_result == 'none'">InProgress</b>
+                                            <b *ngIf="selected_bet.bet_result == 'lost'">Lost</b>
+                                            <b *ngIf="selected_bet.bet_result == 'won'">Won</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Played on:</span>
+                                            <b>{{datetimeService.format(selected_bet.insert_at)}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Week:</span>
+                                            <b>{{selected_bet.year}} / {{selected_bet.week}}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <table class="table table-striped table-sm mb-0">
+                    <thead style="background-color: grey;">
+                        <tr>
+                            <th>Qbet</th>
+                            <th>Match</th>
+                            <th>Sign</th>
+                            <th>Odd</th>
+                            <th>Expire</th>
+                            <th>V</th>
+                            <th>R</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let result of selected_bet_results">
+                            <td><span class="mr-1"><app-sport-icon [key]="result.sport.key"></app-sport-icon></span>{{result.fixture.qbet}}</td>
+                            <td>{{result.fixture.home_team}} - {{result.fixture.away_team}}</td>
+                            <td>{{result.option.name}} ({{result.option.group}})</td>
+                            <td>{{result.prize}}</td>
+                            <td>{{datetimeService.format_date(result.fixture.date)}}</td>
+                            <td>{{result.fixture.ft_result[0]}} : {{result.fixture.ft_result[0]}}</td>
+                            <td>
+                                <i class="fa" [ngClass]="{'fa-spinner text-primary': result.state=='none', 
+                                              'fa-check-circle text-info': result.state=='won', 
+                                              'fa-close text-danger': result.state=='lost'}">
+                              </i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <!-- <div *ngIf="selected_bet.status==1 && selected_bet.bet_result!='none'" class="card-footer text-center"> -->
+        <div class="card-footer text-center">
+            <button class="btn btn-success" (click)="on_view_ticket(ticketModalContent)"><i class="fa fa-ticket mr-1"></i>View Ticket</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,106 @@
+<h5>Settings</h5>
+<div class="card">
+    <div class="card-header page-card-header">
+        <h6 class="mt-1">Betting</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label> Minimum number of events in a ticket</label>
+                <input type="number" class="form-control" [(ngModel)]="min_events_per_ticket">
+            </div>
+            <div class="col-md-4">
+                <label> Maximum number of events in a ticket</label>
+                <input type="number" class="form-control" [(ngModel)]="max_events_per_ticket">
+            </div>
+
+            <div class="col-md-4">
+                <label> Max Stake</label>
+                <input type="number" class="form-control" [(ngModel)]="max_stake">
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-4">
+                <label> Minimum total odd of ticket</label>
+                <input type="number" class="form-control" [(ngModel)]="min_total_odd">
+            </div>
+            <div class="col-md-4">
+                <label> Maximum total odd of ticket</label>
+                <input type="number" class="form-control" [(ngModel)]="max_total_odd">
+            </div>
+            <div class="col-md-4">
+                <label> Void bet</label>
+                <input type="number" class="form-control" [(ngModel)]="void_bet">
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-4">
+                <label class="text-danger"> Max won</label>
+                <input type="number" class="form-control" [(ngModel)]="max_won">
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer text-center">
+        <button class="btn btn-success btn-sm mr-4" (click)="on_save_settings()"><i class="fa fa-save mr-1"></i>Save</button>
+        <button class="btn btn-success btn-sm mr-4" (click)="refresh_setting()"><i class="fa fa-refresh mr-1"></i>Reload</button>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header page-card-header">
+        <h6 class="mt-1">Weeks</h6>
+    </div>
+    <div class="card-body">
+        <div *ngIf="weeks!=null" class="row  align-items-center popover-static">
+            <div class="col-md-3">
+                <div class="popover bs-popover-right">
+                    <div class="arrow"></div>
+                    <h3 class="popover-header text-center">Previous Week</h3>
+                    <div class="popover-body text-center">
+                        <h6>{{weeks.prev.year}} / Week: {{weeks.prev.week}}</h6>
+                        <p>{{weeks.prev.from}} ~ {{weeks.prev.to}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="popover bs-popover-top">
+                    <div class="arrow"></div>
+                    <h3 class="popover-header text-center bg-primary text-white">Current Week</h3>
+                    <div class="popover-body text-center">
+                        <input class="w-50p" type="number" [(ngModel)]="weeks.cur.year" (change)="cur_changed=true"> /
+                        <span class="mr-1">Week:</span><input class="w-50p" type="number" [(ngModel)]="weeks.cur.week" (change)="cur_changed=true">
+                        <p>{{weeks.cur.from}} ~ {{weeks.cur.to}}</p>
+                        <button *ngIf="cur_changed" class="btn btn-success btn-sm" (click)="on_save_week(0, weeks.cur)"><i class="fa fa-save mr-1"></i>Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="popover bs-popover-left">
+                    <div class="arrow"></div>
+                    <h3 class="popover-header text-center">Next Week</h3>
+                    <div class="popover-body text-center">
+                        <input class="w-50p" type="number" [(ngModel)]="weeks.next.year" (change)="next_changed=true"> /
+                        <span class="mr-1">Week:</span><input class="w-50p" type="number" [(ngModel)]="weeks.next.week" (change)="next_changed=true">
+                        <p>{{weeks.next.from}} ~ {{weeks.next.to}}</p>
+                        <button *ngIf="next_changed" class="btn btn-success btn-sm" (click)="on_save_week(1, weeks.next)"><i class="fa fa-save mr-1"></i>Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="popover bs-popover-left">
+                    <div class="arrow"></div>
+                    <h3 class="popover-header text-center">Next + 1 Week</h3>
+                    <div class="popover-body text-center">
+                        <input class="w-50p" type="number" [(ngModel)]="weeks.next1.year" (change)="next1_changed=true"> /
+                        <span class="mr-1">Week:</span><input class="w-50p" type="number" [(ngModel)]="weeks.next1.week" (change)="next1_changed=true">
+                        <p>{{weeks.next1.from}} ~ {{weeks.next1.to}}</p>
+                        <button *ngIf="next1_changed" class="btn btn-success btn-sm" (click)="on_save_week(2, weeks.next1)"><i class="fa fa-save mr-1"></i>Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

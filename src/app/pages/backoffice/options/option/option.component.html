@@ -1,0 +1,91 @@
+<div class="row mb-1">
+    <div class="col">
+        <div class="input-group mb-3 box-shadow">
+            <div class="input-group-prepend">
+                <span class="input-group-text border-top-0 border-left-0 border-bottom-0"><i class="fa fa-search"></i></span>
+            </div>
+            <input type="text" [(ngModel)]="searchText" placeholder="Search option by name..." class="form-control border-0">
+            <div class="input-group-append">
+                <span (click)="openModal(modalContent, null)" class="input-group-text border-top-0 border-right-0 border-bottom-0"><i class="fa fa-plus"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive bg-white box-shadow">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Key</th>
+                        <th>Relation</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let opt of options | NameSearchPipe : searchText | paginate: { itemsPerPage: 10, currentPage: p }">
+                        <td class="align-middle">{{opt.id}}</td>
+                        <td class="align-middle text-truncate">{{opt.name}}</td>
+                        <td class="align-middle text-truncate">{{opt.key}}</td>
+                        <td class="align-middle text-truncate">{{opt.relation}}</td>
+                        <td class="align-middle">
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-secondary btn-sm" (click)="openModal(modalContent, opt)"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-secondary btn-sm" (click)="deleteData(opt)"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white text-center">
+            <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="10"></pagination-controls>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalContent>
+    <div class="modal-body bg-gray">
+        <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5 *ngIf="!option.id">Add new option</h5>
+                    <h5 *ngIf="option.id">Edit option</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="form-group">
+                        <label>Option Name</label>
+                        <input formControlName="name" class="form-control validation-field" type="text">
+                        <small class="text-danger" *ngIf="form.controls.name.touched && form.controls.name.errors?.required">Option name is required</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Option Key</label>
+                        <input formControlName="key" class="form-control validation-field" type="text">
+                        <small class="text-danger" *ngIf="form.controls.key.touched && form.controls.key.errors?.required">Option key is required</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Relation</label>
+                        <select class="form-control" formControlName="relation">
+                            <option value="goal">Goal</option>
+                            <option value="corner">Corner</option>
+                            <option value="card">Card</option>
+                        </select>
+                        <small class="text-danger" *ngIf="form.controls.key.touched && form.controls.key.errors?.required">Option key is required</small>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button [disabled]="!form.valid" class="btn btn-success mr-1 w-100p" type="submit"><span *ngIf="!option.id">Add</span><span *ngIf="option.id">Update</span></button>
+                    <button type="button" class="btn btn-danger w-100p" (click)="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

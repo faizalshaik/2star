@@ -1,0 +1,341 @@
+<h5>Bet List</h5>
+<div class="card  card-warning   border-0 box-shadow">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 calss="mt-1">Filter</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <table class="table-sm table-hover table-striped w-100">
+            <thead>
+                <tr>
+                    <th width="12%"></th>
+                    <th width="30%"></th>
+                    <th width="12%"></th>
+                    <th width="30%"></th>
+                    <th width="16%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-right">Date from:</td>
+                    <td><input class="" type="datetime-local" [(ngModel)]="date_from"></td>
+                    <td class="text-right">to:</td>
+                    <td><input class="" type="datetime-local" [(ngModel)]="date_to"></td>
+                    <td>
+                        <button class="btn btn-sm btn-info" (click)="expanded_filter=!expanded_filter;">
+                        <i *ngIf="!expanded_filter" class="fa fa-plus mr-1"></i>
+                        <i *ngIf="expanded_filter" class="fa fa-minus mr-1"></i>
+                        Other options</button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Option:</td>
+                    <td>
+                        <select [(ngModel)]="option">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let op of options" [value]="op.id">{{op.name}}</option>
+                    </select>
+                    </td>
+                    <td class="text-right">Operator:</td>
+                    <td>
+                        <select [(ngModel)]="operator" (change)="on_change_operator()">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let op of operators" [value]="op.id">{{op.login}}</option>
+                    </select>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-checkbox checkbox-circle">
+                            <input class="custom-control-input checkbox-dark-gray" [(ngModel)]="state_void" id="checkbox_void" type="checkbox"><label class="custom-control-label" for="checkbox_void">Void</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Qbet:</td>
+                    <td>
+                        <input type="number" [(ngModel)]="qbet">
+                    </td>
+                    <td class="text-right">Agency:</td>
+                    <td>
+                        <select [(ngModel)]="agency" (change)="on_change_agency()">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let ag of agencies" [value]="ag.id">{{ag.login}}</option>
+                    </select>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-checkbox checkbox-circle">
+                            <input class="custom-control-input checkbox-primary" [(ngModel)]="state_in_progress" id="checkbox_in_progress" type="checkbox"><label class="custom-control-label" for="checkbox_in_progress">In progress</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Bet Id:</td>
+                    <td>
+                        <input type="number" [(ngModel)]="betid">
+                    </td>
+                    <td class="text-right">User:</td>
+                    <td>
+                        <select [(ngModel)]="user">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let usr of users" [value]="usr.id">{{usr.login}}</option>
+                    </select>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-checkbox checkbox-circle">
+                            <input class="custom-control-input checkbox-danger" [(ngModel)]="state_lost" id="checkbox_lost" type="checkbox"><label class="custom-control-label" for="checkbox_lost">Lost</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Multiplicity:</td>
+                    <td>
+                        <input type="number" class="w-50p" [(ngModel)]="events_min"> ~
+                        <input type="number" class="w-50p" [(ngModel)]="events_max">
+                    </td>
+                    <td class="text-right">Type of bets:</td>
+                    <td>
+                        <select [(ngModel)]="type">
+                        <option value="">Any</option>
+                        <option value="Direct">Direct</option>
+                        <option value="Permutation">Permutation</option>
+                    </select>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-checkbox checkbox-circle">
+                            <input class="custom-control-input checkbox-success" [(ngModel)]="state_won" id="checkbox_won" type="checkbox"><label class="custom-control-label" for="checkbox_won">Won</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="expanded_filter">
+                    <td class="text-right">Amount at least:</td>
+                    <td>
+                        <input type="number" [(ngModel)]="amount_min">
+                    </td>
+                    <td class="text-right">Payout at least:</td>
+                    <td>
+                        <input type="number" [(ngModel)]="payout_min">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="text-right">View from:</td>
+                    <td>
+                        <input type="number" [(ngModel)]="view_from">
+                    </td>
+                    <td class="text-right">to N:</td>
+                    <td>
+                        <input type="number" [(ngModel)]="view_count">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center mb-2">
+            <button class="btn btn-outline-info btn-sm mr-2" (click)="on_search()">
+            <i class="fa fa-search mr-1"></i>Search</button>
+        </div>
+    </div>
+</div>
+
+<div class="card   card-warning   border-0 box-shadow mt-2">
+    <div class="card-body bg-white p-0">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Under</th>
+                    <th>Events</th>
+                    <th>Player</th>
+                    <th>Agent</th>
+                    <th>Operator</th>
+                    <th>Insert at</th>
+                    <th>Amount</th>
+                    <th>Poten.win</th>
+                    <th>Bonus</th>
+                    <th>Expire at</th>
+                    <th>Status</th>
+                    <th>Result</th>
+                    <th>Staff</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let bet of bets">
+                <tr>
+                    <td>{{bet.bet_id}}</td>
+                    <td>{{bet.type}}</td>
+                    <td>{{bet.under}}</td>
+                    <td>{{bet.event_count}}</td>
+                    <td>{{bet.user}}</td>
+                    <td>{{bet.agency}}</td>
+                    <td>{{bet.operator}}</td>
+                    <td>{{bet.insert_at}}</td>
+                    <td>{{bet.amount}}</td>
+                    <td>{{bet.max_win}}</td>
+                    <td>{{bet.bonus}}</td>
+                    <td>{{bet.expire_at}}</td>
+                    <td>
+                        <span *ngIf="bet.status==2" class="badge badge-warning">void</span>
+                    </td>
+                    <td>{{bet.bet_result}}</td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-info btn-sm" (click)="on_select_bet(bet)">
+                        <i *ngIf="selected_bet!=null && selected_bet.bet_id==bet.bet_id" class="fa fa-minus"></i>
+                        <i *ngIf="selected_bet==null || selected_bet.bet_id!=bet.bet_id" class="fa fa-plus"></i>
+                    </button>
+                        <button class="btn btn-danger btn-sm" (click)="on_void_bet(bet)">
+                        <i class="fa fa-trash" title="Void Bet"></i>
+                    </button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="selected_bet!=null && selected_bet.bet_id==bet.bet_id">
+                    <td colspan="16">
+                        <div class="card border-0 box-shadow rounded-0">
+                            <div class="card-body bet-result p-1">
+                                <div style="border: 1px solid rgba(157, 157, 157, 0.7);">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <table class="table table-striped table-sm mb-0">
+                                                <thead style="background-color: grey;">
+                                                    <tr>
+                                                        <th>Ticket Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>Events in coupon:</b>
+                                                                <label>{{selected_bet.event_count}}</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>Amount:</b>
+                                                                <label>{{selected_bet.amount}}</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>Under:</b>
+                                                                <label>{{selected_bet.under}}</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>Win:</b>
+                                                                <label>{{selected_bet.won_amount}}</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>Bonus:</b>
+                                                                <label>0</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>Total win:</b>
+                                                                <label>{{selected_bet.bonus}}</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <table class="table table-striped table-sm mb-0">
+                                                <thead style="background-color: grey;">
+                                                    <tr>
+                                                        <th>Detail Result</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>Result:</b>
+                                                                <label>{{selected_bet.bet_result}}</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between">
+                                                                <b>played on:</b>
+                                                                <label>{{selected_bet.insert_at}}</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <table class="table table-striped table-sm mb-0">
+                                                <thead style="background-color: grey;">
+                                                    <tr>
+                                                        <th>Qbet</th>
+                                                        <th>Home</th>
+                                                        <th>Away</th>
+                                                        <th>Expire</th>
+                                                        <th>Sign</th>
+                                                        <th>HT</th>
+                                                        <th>ST</th>
+                                                        <th>FT</th>
+                                                        <th>H/F</th>
+                                                        <th>State</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let result of selected_bet_results">
+                                                        <td>{{result.fixture.qbet}}</td>
+                                                        <td>{{result.fixture.home_team}}</td>
+                                                        <td>{{result.fixture.away_team}}</td>
+                                                        <td>{{result.fixture.date}} {{result.fixture.time}}</td>
+                                                        <td>{{result.option.name}} ({{result.prize}})</td>
+                                                        <td>{{result.fixture.ht_result[0]}}-{{result.fixture.ht_result[1]}}</td>
+                                                        <td>{{result.fixture.st_result[0]}}-{{result.fixture.st_result[1]}}</td>
+                                                        <td>{{result.fixture.ft_result[0]}}-{{result.fixture.ft_result[1]}}</td>
+                                                        <td></td>
+                                                        <td>{{result.state}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white text-center">
+            <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="10"></pagination-controls>
+        </div>
+    </div>
+</div>

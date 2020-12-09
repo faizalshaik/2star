@@ -1,0 +1,166 @@
+<h5>Latest Results</h5>
+<div class="card card-warning   border-0 box-shadow">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 class="mt-1">Filter</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <table class="table-sm w-100">
+            <thead>
+                <tr hidden>
+                    <th width="6%"></th>
+                    <th width="12%"></th>
+                    <th width="6%"></th>
+                    <th width="12%"></th>
+                    <th width="6%"></th>
+                    <th width="12%"></th>
+                    <th width="6%"></th>
+                    <th width="12%"></th>
+                    <th width="28%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-right">Qbet:</td>
+                    <td><input [(ngModel)]="qbet" class="form-control" type="number"></td>
+                    <td class="text-right">View from:</td>
+                    <td><input [(ngModel)]="from" class="form-control" type="number"></td>
+                    <td class="text-right">N Result:</td>
+                    <td><input [(ngModel)]="count" class="form-control" type="number"></td>
+                    <td class="text-right">Sport:</td>
+                    <td>
+                        <select [(ngModel)]="sport" class="form-control">
+                            <option [value]="0"></option>
+                            <option [value]="sp.id" *ngFor="let sp of sports">{{sp.name}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-info w-100p" type="button" (click)="on_search();"><i class="fa fa-search mr-1"></i>Search</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header transparent p-0">
+        <div class="row tbl-th">
+            <div class="col-md-1 tbl-header text-center border-0">Qbet</div>
+            <div class="col-md-3 tbl-header">Match</div>
+            <div class="col-md-1 tbl-header">HT</div>
+            <div class="col-md-1 tbl-header">ST</div>
+            <div class="col-md-1 tbl-header">FT</div>
+            <div class="col-md-1 tbl-header">Date</div>
+            <div class="col-md-1 tbl-header">Time</div>
+            <div class="col-md-2 tbl-header">Programming</div>
+            <div class="col-md-1 tbl-header">Other</div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="tbl-tr" *ngFor="let event of events | paginate: { itemsPerPage: 10, currentPage: p }">
+            <div class="row">
+                <div class="col-md-1 text-center">{{event.qbet}}</div>
+                <div class="col-md-3">{{event.home_team}} - {{event.away_team}}</div>
+                <div class="col-md-1">{{event.ht_result[0]}}-{{event.ht_result[1]}}</div>
+                <div class="col-md-1">{{event.st_result[0]}}-{{event.st_result[1]}}</div>
+                <div class="col-md-1">{{event.ft_result[0]}}-{{event.ft_result[1]}}</div>
+                <div class="col-md-1">{{event.date}}</div>
+                <div class="col-md-1">{{event.time}}</div>
+                <div class="col-md-2">{{event.league}}</div>
+                <div class="col-md-1">
+                    <button *ngIf="selected_event!=event" class="btn btn-info btn-sm" (click)="on_select_game(event);"><i class="fa fa-plus mr-1"></i></button>
+                    <button *ngIf="selected_event==event" class="btn btn-info btn-sm" (click)="selected_event=null;"><i class="fa fa-minus mr-1"></i></button>
+                </div>
+            </div>
+            <div *ngIf="selected_event==event" class="row m-2">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <b>Goals</b>
+                        </div>
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Competitor</th>
+                                    <th>Player</th>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let goal of goals">
+                                    <td>{{goal.competitor}}</td>
+                                    <td>{{goal.player}}</td>
+                                    <td>{{goal.time}}</td>
+                                    <td>{{goal.type}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <b>Cards</b>
+                        </div>
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Competitor</th>
+                                    <th>Player</th>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let card of cards">
+                                    <td>{{card.competitor}}</td>
+                                    <td>{{card.player}}</td>
+                                    <td>{{card.time}}</td>
+                                    <td><span class="badge badge-pill" [ngClass]="{'badge-warning': card.type=='yellow', 'badge-danger': card.type=='red'}">{{card.type}}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <b>Conners</b>
+                        </div>
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Competitor</th>
+                                    <th>Half Time</th>
+                                    <th>Final Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Home</td>
+                                    <td></td>
+                                    <td>{{conners[0]}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Away</td>
+                                    <td></td>
+                                    <td>{{conners[1]}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white text-center">
+            <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="10"></pagination-controls>
+        </div>
+    </div>
+</div>

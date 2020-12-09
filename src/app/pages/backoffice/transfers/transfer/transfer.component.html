@@ -1,0 +1,153 @@
+<h5>Transfer </h5>
+<div class="row">
+    <div class="col-md-7">
+        <div class="card card-warning   border-0 box-shadow">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 class="mt-1">Transfer</h6>
+            </div>
+            <div class="card-body bg-white p-1">
+                <div class="row" *ngIf="selected_user">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h6 class="form-control mt-1">Login</h6>
+                        </div>
+                        <table class="table table-sm table-striped">
+                            <tbody>
+                                <tr>
+                                    <td width="30%">Login:</td>
+                                    <td width="70%"><b>{{selected_user.login}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Email:</td>
+                                    <td width="70%"><b>{{selected_user.email}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Role:</td>
+                                    <td width="70%"><b>{{selected_user.role}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Member since:</td>
+                                    <td width="70%"><b>{{datetimeService.format(selected_user.created_at)}}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h6 class="form-control mt-1">Personal info</h6>
+                        </div>
+                        <table class="table table-sm table-striped">
+                            <tbody>
+                                <tr>
+                                    <td width="30%">Surname:</td>
+                                    <td width="70%"><b>{{selected_user.surname}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Name:</td>
+                                    <td width="70%"><b>{{selected_user.name}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Gender:</td>
+                                    <td width="70%"><b>{{selected_user.gender}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Balance:</td>
+                                    <td width="70%"><b>₦ {{selected_user.balance}}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h6 class="mt-1 form-control">Movement</h6>
+                    <table class="table table-sm table-striped">
+                        <tbody>
+                            <tr>
+                                <td width="30%">Type:</td>
+                                <td width="35%">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" value="Deposit" name="transfer_type" class="custom-control-input radio-info" id="radio_deposit" [(ngModel)]="move_type">
+                                        <label class="custom-control-label" for="radio_deposit">Deposit</label>
+                                    </div>
+                                </td>
+                                <td width="35%">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" value="Withdraw" name="transfer_type" class="custom-control-input radio-danger" id="radio_withdraw" [(ngModel)]="move_type">
+                                        <label class="custom-control-label" for="radio_withdraw">Withdraw</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Amount:</td>
+                                <td><input type="number" [(ngModel)]="amount"></td>
+                                <td><button class="btn btn-info btn-sm" (click)="on_move()">Confirm</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card card-warning   border-0 box-shadow">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 class="mt-1">Choose user</h6>
+            </div>
+            <div class="card-body bg-white p-0">
+                <table class="table-sm table-hover table-striped w-100">
+                    <tbody>
+                        <tr>
+                            <td width="40%">Operator:</td>
+                            <td width="60%">
+                                <select [(ngModel)]="operator" class="form-control" (change)="on_change_operator()">
+                                    <option [value]="0">Any</option>
+                                    <option *ngFor="let op of operators" [value]="op.id">{{op.login}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Agency:</td>
+                            <td>
+                                <select [(ngModel)]="agency" class="form-control" (change)="on_change_agency()">
+                                    <option [value]="0 ">Any</option>
+                                    <option *ngFor="let ag of agencies " [value]="ag.id ">{{ag.login}}</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>User:</td>
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="username">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="card card-outline-warning mt-1" *ngFor="let user of users | LoginSearchPipe : username | paginate: { itemsPerPage: 10, currentPage: p }" [ngClass]="{'bg-white': selected_user!=user, 'bg-info': selected_user==user}" (click)="selected_user=user">
+                    <div class="card-body p-1">
+                        <div class="d-flex justify-content-between">
+                            <h6>{{user.login}}</h6>
+                            <h6>{{user.surname}} {{user.name}}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <label class="mb-0">{{datetimeService.format(user.created_at)}}</label>
+                            <label class="mb-0">Role: {{user.role}}</label>
+                            <b class="mb-0"><i class="fa fa-money mr-1"></i>₦ {{user.balance}}</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row ">
+                    <div class="col-12 ">
+                        <div class="bg-white text-center">
+                            <pagination-controls autoHide="true " (pageChange)="p=$event " maxSize="6"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

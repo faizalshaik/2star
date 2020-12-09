@@ -1,0 +1,124 @@
+<h5>Define Result</h5>
+<div class="card card-warning   border-0 box-shadow">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 class="mt-1">Filter</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <table class="table-sm w-100">
+            <thead>
+                <tr hidden>
+                    <th width="10%"></th>
+                    <th width="20%"></th>
+                    <th width="10%"></th>
+                    <th width="20%"></th>
+                    <th width="10%"></th>
+                    <th width="20%"></th>
+                    <th width="10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-right">Date Form:</td>
+                    <td><input type="datetime-local" [(ngModel)]="date_from"></td>
+                    <td class="text-right">Date To:</td>
+                    <td><input type="datetime-local" [(ngModel)]="date_to"></td>
+                    <td class="text-right"></td>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input checkbox-success" [(ngModel)]="finished" id="checkbox_past_match" type="checkbox"><label class="custom-control-label" for="checkbox_past_match">Finished</label>
+                        </div>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="text-right">Sport:</td>
+                    <td>
+                        <select [(ngModel)]="sport_id">
+                        <option [value]="0"></option>
+                        <option [value]="sp.id" *ngFor="let sp of sports">{{sp.name}}</option>
+                    </select>
+                    </td>
+
+                    <td class="text-right">Qbet:</td>
+                    <td><input type="number" [(ngModel)]="qbet"></td>
+                    <td class="text-right"></td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="text-right">View Form:</td>
+                    <td><input type="number" [(ngModel)]="from"></td>
+                    <td class="text-right">N Result:</td>
+                    <td><input type="number" [(ngModel)]="count"></td>
+                    <td class="text-right"></td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-sm btn-info" (click)="on_search()"><i class="fa fa-search mr-1"></i>Search</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="card card-warning   border-0 box-shadow mt-2">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6 class="mt-1">Match List</h6>
+    </div>
+    <div class="card-body bg-white p-0">
+        <table class="table-sm table-bordered table-striped w-100">
+            <thead>
+                <tr>
+                    <th width="6%">HT-H</th>
+                    <th width="6%">HT-A</th>
+                    <th width="6%">FT-H</th>
+                    <th width="6%">FT-A</th>
+                    <th class="text-center" width="20%">Match</th>
+                    <th class="text-center" width="6%">Qbet</th>
+                    <th class="text-center" width="12%">Date/Time</th>
+                    <th class="text-center" width="30%">Programming</th>
+                    <th width="8%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ev of matches | paginate: { itemsPerPage: 15, currentPage: p }">
+                    <td><input class="w-50p" type="number" [(ngModel)]="ev.ht_result[0]" (change)="ev.updated=true;"></td>
+                    <td><input class="w-50p" type="number" [(ngModel)]="ev.ht_result[1]" (change)="ev.updated=true;"></td>
+                    <td><input class="w-50p" type="number" [(ngModel)]="ev.ft_result[0]" (change)="ev.updated=true;"></td>
+                    <td><input class="w-50p" type="number" [(ngModel)]="ev.ft_result[1]" (change)="ev.updated=true;"></td>
+                    <td>{{ev.home_team}} - {{ev.away_team}}</td>
+                    <td>{{ev.qbet}}</td>
+                    <td>{{ev.date}} {{ev.time}}</td>
+                    <td>{{ev.league}} - {{ev.country}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger mr-1" (click)="on_remove_match(ev)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                        <button *ngIf="ev.updated" class="btn btn-sm btn-info" (click)="on_save_match(ev);">
+                        <i class="fa fa-save"></i>
+                    </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="row mt-1">
+    <div class="col-12">
+        <div class="bg-white text-center">
+            <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="10"></pagination-controls>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center mt-2">
+    <button class="btn btn-success" (click)="on_calc_result()">Calc results</button>
+</div>

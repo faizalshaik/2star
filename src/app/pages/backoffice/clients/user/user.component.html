@@ -1,0 +1,313 @@
+<h6>User List</h6>
+<div class="card card-warning  border-0 box-shadow">
+    <div class="card-header" style="padding: 0.25rem 1.25rem;">
+        <h6>Filter</h6>
+    </div>
+    <div class="card-body bg-white">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-warning  border-0 box-shadow">
+                    <div class="card-header text-center" style="padding: 0.25rem 1.25rem;">
+                        <label>Personal Information</label>
+                    </div>
+                    <div class="card-body bg-white">
+                        <div class="row mb-1">
+                            <div class="col-md-2 text-right">Name:</div>
+                            <div class="col-md-4"><input type="text" [(ngModel)]="name"></div>
+                            <div class="col-md-2 text-right">Surname:</div>
+                            <div class="col-md-4"><input type="text" [(ngModel)]="surname"></div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-2 text-right">Gender:</div>
+                            <div class="col-md-4">
+                                <select [(ngModel)]="gender">
+                                    <option value = "Male">Male</option>
+                                    <option value = "Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 text-right">Birthday:</div>
+                            <div class="col-md-4"><input type="date" [(ngModel)]="birthday"></div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-2 text-right">Phone:</div>
+                            <div class="col-md-4"><input type="text" [(ngModel)]="phone"></div>
+                            <div class="col-md-2 text-right">Town:</div>
+                            <div class="col-md-4"><input type="text" [(ngModel)]="town"></div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-2 text-right">Country/State:</div>
+                            <div class="col-md-4"><input type="text" [(ngModel)]="country"></div>
+                            <div class="col-md-2 text-right">Show from N:</div>
+                            <div class="col-md-4"><input type="number" [(ngModel)]="view_from" class="w-50p"> N <input type="number" class="w-50p" [(ngModel)]="view_count"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-warning  border-0 box-shadow">
+                    <div class="card-header text-center" style="padding: 0.25rem 1.25rem;">
+                        <label>Account</label>
+                    </div>
+                    <div class="card-body bg-white">
+                        <div *ngIf="get_user_permission()=='admin'" class="row mb-1">
+                            <div class="col-md-2 text-right">Operator:</div>
+                            <div class="col-md-4">
+                                <select [(ngModel)]="operator">
+                                    <option [value]="0">Any</option>
+                                    <option *ngFor="let op of operators" [value]="op.id">{{op.login}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 text-right">Agency:</div>
+                            <div class="col-md-4">
+                                <select [(ngModel)]="agency">
+                                    <option [value]="0">Any</option>
+                                    <option *ngFor="let ag of agencies" [value]="ag.id">{{ag.login}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div *ngIf="get_user_permission()=='operator'" class="row mb-1">
+                            <div class="col-md-2 text-right">Agency:</div>
+                            <div class="col-md-4">
+                                <select [(ngModel)]="agency">
+                                    <option [value]="0">Any</option>                                    
+                                    <option *ngFor="let ag of agencies" [value]="ag.id">{{ag.login}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-1">
+                            <div class="col-md-2 text-right">Login:</div>
+                            <div class="col-md-4"><input type="text" [(ngModel)]="login"></div>
+                            <div class="col-md-2 text-right">Id:</div>
+                            <div class="col-md-4"><input type="number" [(ngModel)]="id"></div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-2 text-right">Email:</div>
+                            <div class="col-md-4"><input type="text" [(ngModel)]="email"></div>
+                            <div class="col-md-2 text-right">Balance from:</div>
+                            <div class="col-md-4">
+                                <input type="number" class="w-50p" [(ngModel)]="balance_min"> ~
+                                <input type="number" class="w-50p" [(ngModel)]="balance_max">
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-2 text-right">Created from:</div>
+                            <div class="col-md-4"><input type="date" [(ngModel)]="created_from"></div>
+                            <div class="col-md-2 text-right">Created to:</div>
+                            <div class="col-md-4"><input type="date" [(ngModel)]="created_to"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-2 mb-2">
+            <button class="btn btn-outline-info btn-sm mr-2" (click)="on_search()">Search</button>
+            <button class="btn btn-outline-info btn-sm" (click)="openModal(modalContent, null)"><i class="fa fa-plus mr-1"></i>Add new</button>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="table-responsive bg-white box-shadow">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Operator</th>
+                        <th>Agency</th>
+                        <th>User</th>
+                        <th>Creation</th>
+                        <th>Name</th>
+                        <th>Surename</th>
+                        <th>Gender</th>
+                        <th>Birth</th>
+                        <th>Place</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Cell</th>
+                        <th>Profile</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let usr of users | NameSearchPipe : searchText | paginate: { itemsPerPage: 10, currentPage: p }">
+                        <td class="align-middle">{{get_operator(usr.parent_id)}}</td>
+                        <td class="align-middle">{{get_agency(usr.parent_id)}}</td>
+                        <td class="align-middle text-truncate">{{usr.login}}</td>
+                        <td class="align-middle text-truncate">{{usr.created_at}}</td>
+                        <td class="align-middle text-truncate">{{usr.name}}</td>
+                        <td class="align-middle text-truncate">{{usr.surname}}</td>
+                        <td class="align-middle text-truncate">{{usr.gender}}</td>
+                        <td class="align-middle text-truncate">{{usr.birth}}</td>
+                        <td class="align-middle text-truncate">{{usr.place}}</td>
+                        <td class="align-middle text-truncate">{{usr.email}}</td>
+                        <td class="align-middle text-truncate">{{usr.phone}}</td>
+                        <td class="align-middle text-truncate">{{usr.mobile}}</td>
+                        <td class="align-middle text-truncate"></td>
+                        <td class="align-middle">
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-secondary btn-sm" (click)="openModal(modalContent, usr)"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-secondary btn-sm" (click)="deleteData(usr)"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white text-center">
+            <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="10"></pagination-controls>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalContent>
+    <div class="modal-body bg-gray">
+        <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5 *ngIf="!user.id">Add new operator</h5>
+                    <h5 *ngIf="user.id">Edit operator</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="clearfix">
+                        <ul class="nav nav-tabs custom top">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#ta">DATA ACCESS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tb">PERSONAL INFORMATION</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content top">
+                        <div class="tab-pane active" id="ta">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-right"><label>Login:</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="login" class="form-control validation-field" type="text">
+                                    <small class="text-danger" *ngIf="form.controls.login.touched && form.controls.login.errors?.required">login is required</small>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Email</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="email" class="form-control validation-field" type="text">
+                                    <small class="text-danger" *ngIf="form.controls.email.touched && form.controls.email.errors?.required">email is required</small>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Agency</label></div>
+                                <div class="col-md-8">
+                                    <select formControlName="parent_id" class="form-control">
+                                        <option *ngFor="let ag of agencies" [value]="ag.id">
+                                            {{ag.login}}
+                                        </option>
+                                    </select>
+                                    <small class="text-danger" *ngIf="form.controls.email.touched && form.controls.email.errors?.required">email is required</small>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Password</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="password" class="form-control" type="text">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-12 text-center">
+                                    <div class="custom-control custom-checkbox ml-5">
+                                        <input formControlName="is_terminal" class="custom-control-input checkbox-primary" id="checkbox_is_terminal" type="checkbox">
+                                        <label class="custom-control-label" for="checkbox_is_terminal">Is Terminal?</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="tb">
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Name</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="name" class="form-control validation-field" type="text">
+                                    <small class="text-danger" *ngIf="form.controls.name.touched && form.controls.name.errors?.required">name is required</small>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Surname</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="surname" class="form-control validation-field" type="text">
+                                    <small class="text-danger" *ngIf="form.controls.surname.touched && form.controls.surname.errors?.required">surname is required</small>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Language</label></div>
+                                <div class="col-md-8">
+                                    <select formControlName="language" class="form-control">
+                                        <option val="en">English</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Birth Day</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="birth" class="form-control" type="date" value="2011-08-19">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Place</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="place" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Gender</label></div>
+                                <div class="col-md-8">
+                                    <select formControlName="gender" class="form-control">
+                                        <option val="Male">Male</option>
+                                        <option val="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Address</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="address" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Phone</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="phone" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 text-right"><label>Mobile</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="mobile" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-right"><label>Fax</label></div>
+                                <div class="col-md-8">
+                                    <input formControlName="fax" class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button [disabled]="!form.valid" class="btn btn-success mr-1 w-100p" type="submit"><span *ngIf="!user.id">Add</span><span *ngIf="user.id">Update</span></button>
+                    <button type="button" class="btn btn-danger w-100p" (click)="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

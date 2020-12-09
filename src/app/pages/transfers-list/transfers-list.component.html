@@ -1,0 +1,155 @@
+<div class="row">
+    <div class="col-12 p-0">
+        <h6>Transfers List</h6>
+        <div class="card card-warning  border-0 box-shadow">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Filter</h6>
+            </div>
+            <div class="card-body bg-white p-1">
+                <div class="row">
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">From:</td>
+                                    <td width="60%"><input class="" type="datetime-local" [(ngModel)]="date_from"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm  mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">To:</td>
+                                    <td width="60%"><input class="" type="datetime-local" [(ngModel)]="date_to"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">View From:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="view_from"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">To N:</td>
+                                    <td width="60%"><input type="number" [(ngModel)]="view_count"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <table class="table table-sm mb-0 w-100">
+                            <thead class="border-0">
+                                <tr>
+                                    <td width="40%" class="text-right">Movement Type:</td>
+                                    <td width="60%">
+                                        <select [(ngModel)]="type">
+                                            <option value='all'>All</option>
+                                            <option value='bet'>Bets</option>
+                                            <option value='wdthdraw'>Withdraw</option>
+                                            <option value='deposit'>Deposit</option>
+                                            <option value='transfer'>Transfer</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="custom-control custom-checkbox ml-5">
+                            <input class="custom-control-input checkbox-primary" [(ngModel)]="show_dete_summary" id="checkbox_show_dete_summary" type="checkbox"><label class="custom-control-label" for="checkbox_show_dete_summary">Show total calculated by date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <button class="btn btn-outline-info btn-sm mr-2" (click)="on_search()">
+                            <i class="fa fa-search mr-1"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-warning  border-0 box-shadow mt-2">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Results</h6>
+            </div>
+            <div class="card-body bg-white p-0">
+                <div class="table-responsive">
+                    <ng2-smart-table class="table table-hover" [settings]="settings" [source]="transactions"></ng2-smart-table>
+                </div>
+            </div>
+        </div>
+
+
+        <div *ngIf="summary" class="card card-warning  border-0 box-shadow mt-2">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Total Result</h6>
+            </div>
+            <div class="card-body bg-white p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped w-100">
+                        <tbody *ngIf="summary">
+                            <tr>
+                                <td width="50%" class="text-right">Total paid</td>
+                                <td class="text-center">₦ {{summary.given}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Total received</td>
+                                <td class="text-center">₦ {{summary.received}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Total net</td>
+                                <td class="text-center">₦ {{summary.received - summary.given}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="show_dete_summary && summary_date" class="card card-warning  border-0 box-shadow mt-2">
+            <div class="card-header" style="padding: 0.25rem 1.25rem;">
+                <h6 calss="mt-1">Date Totals</h6>
+            </div>
+            <div class="card-body bg-white p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped w-100">
+                        <tbody *ngIf="summary">
+                            <tr>
+                                <td width="50%" class="text-right">Total paid</td>
+                                <td class="text-center">₦ {{summary_date.given}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Total received</td>
+                                <td class="text-center">₦ {{summary_date.received}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Total net</td>
+                                <td class="text-center">₦ {{summary_date.received - summary_date.given}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #ticketModalContent>
+    <app-ticket-print [bet]="selected_bet" [bet_results]="selected_bet_results" [userInfo]="cachService.getUser()"></app-ticket-print>
+</ng-template>

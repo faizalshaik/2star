@@ -1,0 +1,1308 @@
+<div class="row" id="total-area">
+    <!-- <div class="col-md-2 game-menu-area" style="height: calc(100vh - 72px); overflow: auto;">
+        <app-game-menu [menuItems]="menuItems" (childEvent)="onSelectLeague($event)"></app-game-menu>
+    </div> -->
+
+    <!-- <div class="col-md-2 left-area" style="padding: 0 !important; height: calc(100vh - 92px); overflow: auto;"> -->
+    <div class="col-md-2 left-area" style="padding: 0 !important;">
+        <div id="left-area">
+            <!-- normal /quick bet -->
+            <ul class="nav nav-tabs custom top tabs-warning" role="tablist">
+                <li class="nav-item text-center" style="width: 50%;"><a class="nav-link active" data-toggle="tab" href="#w1" role="tab" aria-selected="true" (click)="is_quick_bet=false">Normal</a></li>
+                <li class="nav-item text-center" style="width: 50%;"><a class="nav-link" data-toggle="tab" href="#w1" role="tab" aria-selected="false" (click)="is_quick_bet=true">QuickBet</a></li>
+            </ul>
+
+            <div class="tab-content tab-content-white">
+                <div class="tab-pane fade active show" id="w1">
+                    <div class="input-group input-group-sm mt-1">
+                        <div class="input-group-prepend" style="width: 120px;">
+                            <span class="input-group-text w-100">Game module:</span>
+                        </div>
+                        <select class="form-control">
+                        <option>Large</option>
+                        <option>Classic</option>
+                        <option>European</option>
+                        <option>Asian</option>
+                        <option>softion</option>
+                    </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div *ngIf="!is_quick_bet" class="card box-shadow mt-1">
+                <div class="card-header">
+                    <h6 class="mb-0">PROGRAMMINGS</h6>
+                </div>
+                <ul class="nav nav-tabs custom top tabs-warning mt-1" role="tablist">
+                    <li class="nav-item text-center" style="width: 30%;"><a class="nav-link active" data-toggle="tab" href="#" role="tab" aria-selected="true" (click)="on_select_day('today')">Today</a></li>
+                    <li class="nav-item text-center" style="width: 45%;"><a class="nav-link" data-toggle="tab" href="#" role="tab" aria-selected="false" (click)="on_select_day('tomorrow')">Tomorrow</a></li>
+                    <li class="nav-item text-center" style="width: 25%;"><a class="nav-link" data-toggle="tab" href="#" role="tab" aria-selected="false" (click)="on_select_day('all')">All</a></li>
+                </ul>
+                <div class="card-body">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        </div>
+                        <input class="form-control" placeholder="Search by name" type="text">
+                    </div>
+                    <!-- <div class="input-group input-group-sm mt-1">
+                    <div class="input-group-prepend" style="width: 120px;">
+                        <span class="input-group-text w-100">MOST PLAYED</span>
+                    </div>
+                    <input class="form-control" type="number" [(ngModel)]="mostplayed_event_count" (change)="on_change_most_played_event_count()">
+                </div>
+                <div class="input-group input-group-sm mt-1">
+                    <div class="input-group-prepend" style="width: 120px;">
+                        <span class="input-group-text w-100">UPCOMING EVENTS</span>
+                    </div>
+                    <input class="form-control" type="number" [(ngModel)]="upcoming_event_count" (change)="on_change_upcoming_event_count()">
+                </div> -->
+
+                </div>
+
+                <div id="sports-menu" class="sport-menu" role="tablist">
+                    <div class="card border-0 rounded-0" *ngFor="let sport of sports_menu;">
+                        <div class="card-header sport-name" role="tab" [id]="sport.head_id">
+                            <a class="collapsed text-white w-100" data-toggle="collapse" [href]="sport.body_id_ref" aria-expanded="false">
+                                <h6 class="mb-0 w-100">
+                                    <span class="mr-1"><app-sport-icon [key]="sport.key"></app-sport-icon></span> {{sport.name}}
+                                </h6>
+                            </a>
+                            <div class="widget-controls p-0">
+                                <label class="text-white mt-2 mr-2">{{sport.countries.length}}</label>
+                            </div>
+                        </div>
+                        <div [id]="sport.body_id" class="collapse" data-parent="#sports-menu" role="tabpanel">
+
+                            <div id="country-list" role="tablist">
+                                <div class="card border-0 rounded-0" style="background-color: grey;" *ngFor="let country of sport.countries; let icountry = index;">
+                                    <div class="card-header country-name" role="tab" [id]="country.head_id">
+                                        <a class="collapsed text-white" data-toggle="collapse" [href]="country.body_id_ref" aria-expanded="false">
+                                            <h6 class="mb-0 ml-1">
+                                                <img [src]="country.logo" class="mr-1" style="width: 12px;" /> {{country.name}}
+                                                <!-- <span _ngcontent-qui-c15="" class="badge badge-info badge-pill pull-right mr-2">{{country.league_count}}</span> -->
+                                            </h6>
+                                        </a>
+                                        <div class="widget-controls">
+                                            <div class="custom-checkbox">
+                                                <input class="custom-control-input" [id]="country.check_id" type="checkbox" [checked]="country.checked" (change)="checkedCountry($event.target.checked, icountry)">
+                                                <label class="custom-control-label text-warning" style="width: 18px;" [for]="country.check_id">{{country.league_count}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div [id]="country.body_id" class="collapse" data-parent="#country-list" role="tabpanel">
+                                        <div *ngFor="let league of country.leagues; let ileague = index;" class="league_name">
+                                            <h6 class="ml-4">
+                                                <img [src]="league.logo" class="ml-2 mr-1" style="width: 12px;" />
+                                                <span class="text-truncate">{{league.name}}</span>
+                                                <span class="pull-right">
+                                                <div class="custom-checkbox">
+                                                    <input class="custom-control-input" [id]="league.check_id" type="checkbox" [checked]="league.checked" (change) ="checkedLeague($event.target.checked, icountry, ileague)">
+                                                    <label class="custom-control-label text-warning" style="width: 1px;" [for]="league.check_id"></label>
+                                                </div>
+                                            </span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="is_quick_bet" class="card box-shadow mt-1">
+                <div class="card-header">
+                    <h6 class="mb-0">QUICKBET</h6>
+                </div>
+                <div class="card-body">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        </div>
+                        <input class="form-control" placeholder="Search by name" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="is_quick_bet" class="card box-shadow mt-1">
+                <div class="card-header">
+                    <h6 class="mb-0">QUICK SEARCH</h6>
+                </div>
+                <div class="card-body">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100p">Sport</span>
+                        </div>
+                        <select class="form-control" #quick_sport (change)='on_quick_sport_selected(quick_sport.value)'>
+                        <option *ngFor="let sport of sports" [value]="0">Select sport</option>
+                        <option *ngFor="let sport of sports" [value]="sport.id">{{sport.name}}</option>
+                    </select>
+                    </div>
+
+                    <div class="input-group input-group-sm mt-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text  w-100p">Programming</span>
+                        </div>
+                        <!-- <select id="disbursementType" class="form-control" name="disbursementType" required [(ngModel)]="hero.power" #power="ngModel">
+                            <optgroup [attr.label]="group.name" *ngFor="let group of groupedArray">
+                                <option *ngFor="let disbursementTypeOption of group.values" 
+                                    [value]="disbursementTypeOption.key">
+                                {{disbursementTypeOption.title}}
+                                </option>
+                            </optgroup>
+                        </select> -->
+                        <select class="form-control" #quick_league (change)='on_quick_league_selected(quick_league.value)'>
+                        <optgroup [attr.label]="country.name" *ngFor="let country of quick_countries">
+                            <option *ngFor="let league of country.leagues" [value]="league.id">
+                                {{league.name}}
+                            </option>
+                        </optgroup>
+                    </select>
+                    </div>
+
+                    <div *ngFor="let event of quick_events" class="flip mt-1" (click)="on_select_quick_event(event)">
+                        <div class="content">
+                            <div class="front">
+                                <div class="card border-0 box-shadow rounded-0">
+                                    <div class="card-header border-0 rounded-0 text-muted">
+                                        <h6 class="mb-0">
+                                            <!-- <i *ngIf="event.status != 'Finished'" class="fa fa-user mr-2" [ngClass]="{ 'text-success': event.live > 0, 
+                                                                                'text-inverse': event.live == 0}" placement="bottom" [ngbTooltip]="(event.live > 0) ? 'live' : 'predict'"></i>
+                                        <i *ngIf="event.status == 'Finished'" class="fa fa-user mr-2 text-danger" placement="bottom" [ngbTooltip]="'finished'"></i> {{event.home_team_name}} - {{event.away_team_name}} -->
+                                            <i *ngIf="event.status != 'Finished'" class="fa fa-eye mr-2" [ngClass]="{ 'text-success': event.live > 0, 
+                                            'text-inverse': event.live == 0}" placement="bottom"></i>
+                                            <i *ngIf="event.status == 'Finished'" class="fa fa-eye mr-2 text-danger" placement="bottom"></i> {{event.home_team}} : {{event.away_team}}
+
+                                        </h6>
+                                        <div class="widget-controls">
+                                            <a (click)="openMenuAssign($event)" href="javascript:void(0);" class="transition"><i class="fa fa-bars"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pt-3">
+                                        <div class="d-flex justify-content-around">
+                                            <img [src]="event.home_team_logo" width="32">
+                                            <b>{{event.final_result[0]}} : {{event.final_result[1]}}</b>
+                                            <img [src]="event.away_team_logo" width="32">
+                                        </div>
+                                        <div class="row mt-1">
+                                            <div class="col-4 text-gray text-right pr-0 font-italic text-truncate">date:</div>
+                                            <div class="col-8 pl-2 text-truncate">{{event.date}}</div>
+                                            <div class="col-4 text-gray text-right pr-0 font-italic text-truncate">time:</div>
+                                            <div class="col-8 pl-2 text-truncate">{{event.time}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="back">
+                                <div class="card border-0 box-shadow rounded-0">
+                                    <div class="card-header border-0 rounded-0 text-muted">
+                                        <h6 class="mb-0">
+                                            <!-- <i *ngIf="event.status != 'Finished'" class="fa fa-user mr-2" [ngClass]="{ 'text-success': event.live > 0, 
+                                            'text-inverse': event.live == 0}" placement="bottom" [ngbTooltip]="(event.live > 0) ? 'live' : 'predict'"></i>
+                                        <i *ngIf="event.status == 'Finished'" class="fa fa-user mr-2 text-danger" placement="bottom" [ngbTooltip]="'finished'"></i> {{event.home_team_name}} - {{event.away_team_name}} -->
+                                            <i *ngIf="event.status != 'Finished'" class="fa fa-eye mr-2" [ngClass]="{ 'text-success': event.live > 0, 
+                                            'text-inverse': event.live == 0}" placement="bottom"></i>
+                                            <i *ngIf="event.status == 'Finished'" class="fa fa-eye mr-2 text-danger" placement="bottom"></i> {{event.home_team}} : {{event.away_team}}
+
+                                        </h6>
+                                        <div class="widget-controls">
+                                            <a (click)="closeMenuAssign($event)" href="javascript:void(0);" class="transition"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pt-3">
+                                        <div class="row text-center">
+                                            <div class="col-4 text-gray text-right pr-0 font-italic text-truncate">round:</div>
+                                            <div class="col-8 pl-2 text-truncate">{{event.league_round}}</div>
+                                            <div class="col-4 text-gray text-right pr-0 font-italic text-truncate">season:</div>
+                                            <div class="col-8 pl-2 text-truncate">{{event.league_season}}</div>
+                                            <div class="col-4 text-gray text-right pr-0 font-italic text-truncate">half time result:</div>
+                                            <div class="col-8 pl-2 text-truncate">{{event.halftime_result}}</div>
+                                        </div>
+
+                                        <!-- <ss-multiselect-dropdown id="menuSelect{{user.id}}" class="custom-multiselect" [options]="menuSelectOptions" [texts]="menuSelectTexts" [settings]="menuSelectSettings" [(ngModel)]="user.menuIds">
+                                    </ss-multiselect-dropdown>
+                                    <div class="w-100 text-center pt-3">
+                                        <button class="btn btn-success" (click)="assignMenuItemsToUser(user)"> Assign menu items to user </button>
+                                        <p class="text-gray fs-13 mt-2">Logout and login to see result.</p>
+                                    </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card box-shadow mt-1">
+                <div class="card-header">
+                    <h6 class="mb-0">LATEST WINNINGS</h6>
+                </div>
+                <table class="table table-striped table-sm mb-0">
+                    <tbody>
+                        <tr (click)="on_show_latest_win_result(latestWinResultModalContent)">
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Jacob</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">4</td>
+                            <td>Steve</td>
+                            <td>Urkel</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="cacheService.getUser()" class="card box-shadow mt-1">
+                <div class="card-header">
+                    <h6 class="mb-0">Printing</h6>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-warning btn-block mt-1" type="button" (click)="on_open_print_odds_modal(printOddsModalContent)">
+                        <i class="fa fa-print mr-1"></i> Print Odds
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-8 main-area">
+        <div id="main-area">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <div *ngIf="is_mobile_mode" class="text-center" style="position: absolute;
+                                                z-index: 1;    width: 100%;    color: white;    padding: 4px 0;
+                                                background-color: #27230761;">Week: 38 (2020-09-21 ~ 2020-09-27)</div>
+
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                        <img class="d-block img-fluid w-100 h-100" src="assets/img/app/slide/1.jpg" alt="First slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h3>First slide caption</h3>
+                                <p>First slide description</p> -->
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block img-fluid w-100 h-100" src="assets/img/app/slide/2.jpg" alt="Second slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h3>Second slide caption</h3>
+                                <p>Second slide description</p> -->
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block img-fluid w-100 h-100" src="assets/img/app/slide/3.jpg" alt="Third slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h3>Third slide caption</h3>
+                                <p>Third slide description</p> -->
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+            <div *ngIf="!is_quick_bet">
+
+                <!-- user selected -->
+                <div class="card box-shadow mt-2" *ngFor="let league of focused_leagues; let i = index;">
+                    <div class="card-header">
+                        <h6 class="mb-0">{{league.country_name}} - {{league.league_name}}</h6>
+                    </div>
+
+                    <div *ngIf="!is_mobile_mode" class="options-area">
+                        <div style="position: absolute;">
+                            <button *ngIf="focused_league_opt_group_sels[i].expanded" class="btn btn-sm btn-warning mt-1 ml-1" type="button" (click)="focused_league_opt_group_sels[i].expanded=false">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                            <button *ngIf="!focused_league_opt_group_sels[i].expanded" class="btn btn-sm btn-warning mt-1 ml-1" type="button" (click)="focused_league_opt_group_sels[i].expanded=true">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </div>
+                        <div class="options-body">
+                            <div *ngIf="focused_league_opt_group_sels[i].expanded" class="row mt-1 mb-1">
+                                <div class="col-md-4 pl-0 pr-0" *ngFor="let grp of option_groups;">
+                                    <div class="option-item">
+                                        <button *ngIf="grp.id!=focused_league_opt_group_sels[i].id" class="btn btn-sm btn-outline-warning w-100" type="button" (click)="on_select_option_group(league.days, focused_league_opt_group_sels[i], grp)">{{grp.name}}</button>
+                                        <button *ngIf="grp.id==focused_league_opt_group_sels[i].id" class="btn btn-sm btn-warning w-100" type="button">{{grp.name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!focused_league_opt_group_sels[i].expanded" class="row mt-1 mb-1">
+                                <div class="col-md-4 pl-0 pr-0">
+                                    <div class="option-item">
+                                        <button class="btn btn-sm btn-warning w-100" type="button">{{focused_league_opt_group_sels[i].name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div *ngFor="let day of league.days">
+                        <label class="section-label mb-0">{{datetimeService.format_date(day.date)}}  week : {{day.week.week}}</label>
+                        <table *ngIf="!is_mobile_mode" class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th style="width: 120px;">Time</th>
+                                    <th style="width: 80px;">Qbet</th>
+                                    <th style="width: 24px;"></th>
+                                    <th>Match</th>
+                                    <th *ngFor="let opt of focused_league_opt_group_sels[i].options" style="width: 52px;">{{opt.name}}</th>
+                                    <th style="width: 64px;">Others</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let event of day.events">
+                                    <th scope="row">{{datetimeService.format_time(event.time)}}</th>
+                                    <td>{{event.qbet}}</td>
+                                    <td>
+                                        <app-sport-icon [key]="event.sport_key"></app-sport-icon>
+                                    </td>
+                                    <td>{{event.home_team}} : {{event.away_team}}</td>
+                                    <td *ngFor="let opt of focused_league_opt_group_sels[i].options;">
+                                        <button class="btn btn-sm option-value" [ngClass]="{'btn-warning': get_option_value(event, opt) && !is_played(event, opt.id), 'btn-inverse': get_option_value(event, opt) && is_played(event, opt.id), 'btn-outline-inverse': !get_option_value(event, opt)}"
+                                            [disabled]="!get_option_value(event, opt)" type="button" (click)="on_play_event(event, opt)">{{get_option_value(event, opt)}}</button>
+                                    </td>
+                                    <td><button class="btn btn-sm btn-outline-inverse" type="button" (click)="on_show_more_options(event, fullOptionModalContent)">
+                                        <span><i class="fa fa-adjust"></i></span> {{get_valid_options_count(event)}}</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table *ngIf="is_mobile_mode" class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Qbet</th>
+                                    <th>Match</th>
+                                    <th>Others</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let event of day.events">
+                                    <th scope="row">{{event.time}}</th>
+                                    <td>{{event.key}}</td>
+                                    <td>{{event.home_team}} : {{event.away_team}}</td>
+                                    <td><button class="btn btn-sm btn-outline-inverse" type="button" (click)="on_show_more_options(event, fullOptionModalContent)">
+                                        <span><i class="fa fa-adjust"></i></span> {{get_valid_options_count(event)}}</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- upcomming -->
+                <div class="card box-shadow mt-2">
+                    <div class="card-header">
+                        <h6 class="mb-0">UPCOMING EVENTS</h6>
+                        <div class="widget-controls p-0">
+                            <input _ngcontent-mqd-c11="" class="w-50p mt-2 mr-2 text-center" type="number" style="border: 1px;
+                                border-radius: 2px;color: white;background-color: #fe970082;" min="5" max="50" [(ngModel)]="upcoming_event_count" (change)="on_change_upcoming_event_count()">
+                        </div>
+                    </div>
+
+                    <div *ngIf="!is_mobile_mode" class="options-area">
+                        <div style="position: absolute;">
+                            <button *ngIf="upcoming_opt_group_sel.expanded" class="btn btn-sm btn-warning mt-1 ml-1" type="button" (click)="upcoming_opt_group_sel.expanded=false">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                            <button *ngIf="!upcoming_opt_group_sel.expanded" class="btn btn-sm btn-warning mt-1 ml-1" type="button" (click)="upcoming_opt_group_sel.expanded=true">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </div>
+                        <div class="options-body">
+                            <div *ngIf="upcoming_opt_group_sel.expanded" class="row mt-1 mb-1">
+                                <div class="col-md-4 pl-0 pr-0" *ngFor="let grp of option_groups;">
+                                    <div class="option-item">
+                                        <button *ngIf="grp.id!=upcoming_opt_group_sel.id" class="btn btn-sm btn-outline-warning w-100" type="button" (click)="on_select_option_group(upcoming_events, upcoming_opt_group_sel, grp)">{{grp.name}}</button>
+                                        <button *ngIf="grp.id==upcoming_opt_group_sel.id" class="btn btn-sm btn-warning w-100" type="button">{{grp.name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!upcoming_opt_group_sel.expanded" class="row mt-1 mb-1">
+                                <div class="col-md-4 pl-0 pr-0">
+                                    <div class="option-item">
+                                        <button class="btn btn-sm btn-warning w-100" type="button">{{upcoming_opt_group_sel.name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngFor="let day of upcoming_events">
+                        <label class="section-label mb-0">{{datetimeService.format_date(day.date)}} week : {{day.week.week}}</label>
+                        <table *ngIf="!is_mobile_mode" class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th style="width: 120px;">Time</th>
+                                    <th style="width: 80px;">Qbet</th>
+                                    <th style="width: 24px;"></th>
+                                    <th>Match</th>
+                                    <th *ngFor="let opt of upcoming_opt_group_sel.options" style="width: 52px;">{{opt.name}}</th>
+                                    <th style="width: 64px;">Others</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let event of day.events">
+                                    <th scope="row">{{datetimeService.format_time(event.time)}}</th>
+                                    <td>{{event.qbet}}</td>
+                                    <td>
+                                        <app-sport-icon [key]="event.sport_key"></app-sport-icon>
+                                    </td>
+                                    <td>{{event.home_team}} : {{event.away_team}}</td>
+                                    <td *ngFor="let opt of upcoming_opt_group_sel.options;">
+                                        <button class="btn btn-sm option-value" [ngClass]="{'btn-warning': get_option_value(event, opt) && !is_played(event, opt.id), 'btn-inverse': get_option_value(event, opt) && is_played(event, opt.id), 'btn-outline-inverse': !get_option_value(event, opt)}"
+                                            [disabled]="!get_option_value(event, opt)" type="button" (click)="on_play_event(event, opt)">{{get_option_value(event, opt)}}</button>
+                                    </td>
+                                    <td><button class="btn btn-sm btn-outline-inverse" type="button" (click)="on_show_more_options(event, fullOptionModalContent)">
+                                        <span><i class="fa fa-adjust"></i></span> {{get_valid_options_count(event)}}</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table *ngIf="is_mobile_mode" class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Qbet</th>
+                                    <th>Match</th>
+                                    <th>Others</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let event of day.events">
+                                    <th scope="row">{{event.time}}</th>
+                                    <td>{{event.qbet}}</td>
+                                    <td>{{event.home_team}} : {{event.away_team}}</td>
+                                    <td><button class="btn btn-sm btn-outline-inverse" type="button" (click)="on_show_more_options(event, fullOptionModalContent)">
+                                        <span><i class="fa fa-adjust"></i></span> {{get_valid_options_count(event)}}</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- most played -->
+                <div class="card box-shadow mt-2">
+                    <div class="card-header">
+                        <h6 class="mb-0">MOST PLAYED</h6>
+                        <div class="widget-controls p-0">
+                            <input _ngcontent-mqd-c11="" class="w-50p mt-2 mr-2 text-center" type="number" style="border: 1px;
+                                border-radius: 2px;color: white;background-color: #fe970082;" min="5" max="50" [(ngModel)]="mostplayed_event_count" (change)="on_change_most_played_event_count()">
+                        </div>
+                    </div>
+
+                    <div *ngIf="!is_mobile_mode" class="options-area">
+                        <div style="position: absolute;">
+                            <button *ngIf="mostplayed_opt_group_sel.expanded" class="btn btn-sm btn-warning mt-1 ml-1" type="button" (click)="mostplayed_opt_group_sel.expanded=false">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                            <button *ngIf="!mostplayed_opt_group_sel.expanded" class="btn btn-sm btn-warning mt-1 ml-1" type="button" (click)="mostplayed_opt_group_sel.expanded=true">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        </div>
+                        <div class="options-body">
+                            <div *ngIf="mostplayed_opt_group_sel.expanded" class="row mt-1 mb-1">
+                                <div class="col-md-4 pl-0 pr-0" *ngFor="let grp of option_groups;">
+                                    <div class="option-item">
+                                        <button *ngIf="mostplayed_opt_group_sel.id!=grp.id" class="btn btn-sm btn-outline-warning w-100" type="button" (click)="on_select_option_group(mostplayed_events, mostplayed_opt_group_sel, grp)">{{grp.name}}</button>
+                                        <button *ngIf="mostplayed_opt_group_sel.id==grp.id" class="btn btn-sm btn-warning w-100" type="button">{{grp.name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!mostplayed_opt_group_sel.expanded" class="row mt-1 mb-1">
+                                <div class="col-md-4 pl-0 pr-0">
+                                    <div class="option-item">
+                                        <button class="btn btn-sm btn-warning w-100" type="button">{{mostplayed_opt_group_sel.name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table *ngIf="!is_mobile_mode" class="table table-striped table-sm mb-0">
+                        <thead style="background-color: grey;">
+                            <tr>
+                                <th style="width: 80px;">Qbet</th>
+                                <th>Match</th>
+                                <th *ngFor="let opt of mostplayed_opt_group_sel.options" style="width: 52px;">{{opt.name}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table *ngIf="is_mobile_mode" class="table table-striped table-sm mb-0">
+                        <thead style="background-color: grey;">
+                            <tr>
+                                <th style="width: 80px;">Qbet</th>
+                                <th>Match</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div *ngIf="is_quick_bet">
+                <div class="card box-shadow">
+                    <div class="card-header">
+                        <h6 class="mb-0">QUICKBET</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">QBet</span>
+                                    </div>
+                                    <input class="form-control" placeholder="" type="number" [(ngModel)]="selected_event_id" #quick_qbet (change)="on_change_quick_event_id()" (focus)="on_focus_quick_bet_qbet()">
+                                    <div class="input-group-append"><button class="btn btn-warning" type="button" (click)="on_change_quick_event_id()"> <i class="fa fa-refresh"></i> </button></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Sign Code</span>
+                                    </div>
+                                    <input class="form-control" placeholder="" type="number" #quick_option_id [(ngModel)]="selected_option_id" (keydown.enter)="on_add_new_game()" (focus)="on_focus_quick_bet_option_id()">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Sign</span>
+                                    </div>
+                                    <select class="form-control custom-select" [(ngModel)]="selected_option_id">
+                                        <optgroup [attr.label]="opt_grp.name" *ngFor="let opt_grp of quick_option_groups">
+                                            <option *ngFor="let opt of opt_grp.options" [value]="opt.id" [disabled]="!opt.value">
+                                                {{opt.name}}
+                                            </option>
+                                        </optgroup>
+                                    </select>
+                                    <div class="input-group-append"><button class="btn  ml-1 btn-warning" type="button" #quick_play_game (click)="on_add_new_game()"> Forward </button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="section-label mb-0 text-center">
+                        {{selected_event_title}}
+                    </label>
+
+                    <div class="row" style="padding: 0; margin: 0;">
+                        <div class="col-md-4" style="padding: 4px;" *ngFor="let grp of quick_option_groups">
+                            <div class="card card-outline-primary text-center">
+                                <div class="text-center mt-2">
+                                    <h6>{{grp.name}}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-striped table-sm mb-0">
+                                        <!-- <thead style="background-color: grey;">
+                                            <tr>
+                                                <th>Sign Code</th>
+                                                <th>Sing</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead> -->
+                                        <tbody>
+                                            <tr *ngFor="let opt of grp.options">
+                                                <td>
+                                                    <div class="d-flex justify-content-around">
+                                                        <b>{{opt.id}}</b>
+                                                        <label>{{opt.name}}</label>
+                                                        <label><span class="badge badge-info mr-1">{{opt.value}}</span></label>
+                                                    </div>
+                                                </td>
+                                                <!-- <th scope="row"></th>
+                                                <td>{{opt.name}}</td>
+                                                <td><span class="badge badge-info mr-1">{{opt.value}}</span></td> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 cupon-area">
+        <div id="right-area">
+            <div id="couponarea-prfix"></div>
+            <div class="card box-shadow">
+                <div class="card-header">
+                    <h6 class="mb-0">COUPON</h6>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="form-area">
+                        <div class="input-group  input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0 w-100p">
+                                QuickBet:
+                            </span>
+                            </div>
+                            <input class="form-control border-0" placeholder="" type="text">
+                        </div>
+
+                        <div class="input-group  input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0 w-100p">
+                                Open Ticket:
+                            </span>
+                            </div>
+                            <input class="form-control border-0" placeholder="" type="text">
+                        </div>
+
+                        <div class="input-group  input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0 w-100p">
+                                Odds:
+                            </span>
+                            </div>
+                            <select class="form-control border-0" [(ngModel)]="selected_odd_val">
+                                <option [ngValue]="1.5">Decimals(1.50)</option>
+                                <option [ngValue]="0.5">Fractional(1/2)</option>
+                                <option [ngValue]="-200">Moneyline(-200)</option>
+                                <option [ngValue]="0.5">Hong Kong(0.50)</option>
+                                <option [ngValue]="-2.0">Indonesian(-2.00)</option>
+                                <option [ngValue]="-2.0">Malaysian(0.50)</option>
+                            </select>
+                        </div>
+
+                        <!-- [disabled]="2 > game_datas.length" -->
+
+
+                        <ul *ngIf="game_datas.length > 0" class="nav nav-tabs custom top tabs-warning mt-3" role="tablist">
+                            <li class="nav-item text-center" style="width: 50%;"><a class="nav-link active" data-toggle="tab" href="#" role="tab" aria-selected="true" (click)="betting_mode='direct'">Direct</a></li>
+                            <li class="nav-item text-center" style="width: 50%;"><a class="nav-link" data-toggle="tab" href="#" role="tab" aria-selected="false" (click)="betting_mode='permutation'">Permutation</a></li>
+                        </ul>
+
+                        <div class="mt-3" *ngIf="game_datas.length > 0">
+                            <h6>Events <span class="badge badge-pill badge-warning"> {{game_datas.length}}</span></h6>
+                        </div>
+                        <div class="card card-outline-warning game-data" *ngFor="let game of game_datas; let i=index;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-0"><span class="mr-1"><app-sport-icon [key]="game.sport_key"></app-sport-icon></span>{{game.qbet}}</h6>
+                                    <h6 class="mb-0">{{game.event_title}}</h6>
+                                    <i class="fa fa-trash-o" style="cursor: pointer;" (click)="on_remove_event(i)"></i>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <label class="mb-0">{{datetimeService.format(game.event_date + ' ' + game.event_time)}}</label>
+                                    <label class="mb-0">{{game.option_name}}</label>
+                                    <label class="badge badge-info mb-0">{{game.value}}</label>
+                                    <div *ngIf="get_option_relation(game.option_id)=='goal'" style="margin-top: -2px;">
+                                        <button class="btn dropdown-toggle btn-sm btn-outline-info" style="padding: 0.0rem 0.2rem;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i *ngIf="game.result_time == 'ft'" class="fa fa-hourglass text-warning"></i>
+                                            <i *ngIf="game.result_time == 'ht'" class="fa fa-hourglass-1 text-warning"></i>
+                                            <i *ngIf="game.result_time == 'st'" class="fa fa-hourglass-end text-warning"></i>                                            
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="javascript:void(0);" (click)="game.result_time='ht'"><i class="fa fa-hourglass-1 mr-2  text-warning"></i>1st Half</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" (click)="game.result_time='st'"><i class="fa fa-hourglass-end mr-2 text-warning"></i>2nd Half</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" (click)="game.result_time='ft'"><i class="fa fa-hourglass mr-2 text-warning"></i>Full Time</a>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="get_option_relation(game.option_id)!='goal'" style="margin-top: -2px;">
+                                        <button class="btn dropdown-toggle btn-sm btn-outline-info" style="padding: 0.0rem 0.2rem;" type="button">
+                                            <i class="fa fa-hourglass text-warning"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="info_alert" class="alert alert-info fade show" role="alert">
+                            <button aria-label="Close" class="close" (click)="info_alert=null" type="button">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>{{info_alert.title}}</strong> {{info_alert.message}}
+                            <div *ngIf="last_bet" class="text-right mt-1">
+                                <button class="ml-2 btn btn-sm btn-outline-danger" (click)="on_print_bet(ticketModalContent)"><i class="fa fa-print mr-1"></i>Print</button>
+                            </div>
+                        </div>
+                        <div *ngIf="warning_alert" class="alert alert-info fade show" role="alert">
+                            <button aria-label="Close" class="close" (click)="warning_alert=null" type="button">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>{{warning_alert.title}}</strong> {{warning_alert.message}}
+                        </div>
+                        <div *ngIf="error_alert" class="alert alert-info fade show" role="alert">
+                            <button aria-label="Close" class="close" (click)="error_alert=null" type="button">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>{{error_alert.title}}</strong> {{error_alert.message}}
+                        </div>
+
+
+                        <div *ngIf="game_datas.length > 0" class="mb-2" style="background-color: antiquewhite;">
+                            <div class="game_report">
+                                <table class="table table-striped table-sm mb-0">
+                                    <tbody>
+                                        <tr *ngIf="betting_mode=='permutation'">
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <label class="mb-0">Under:</label>
+                                                    <!-- <input type="number" class="w-100p" [(ngModel)]="betting_under" min="1" [max]="game_datas.length-1"  /> -->
+                                                    <select [(ngModel)]="betting_under" (change)="calc_betting()" style="width:80px;">
+                                                        <option *ngFor="let under of unders()" [ngValue]="under.value">{{under.name}}</option>
+                                                    </select>
+                                                    <label class="mb-0">{{betting_under}}</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <label class="mb-0">Amount:</label>
+                                                    <input type="number" style="width:80px;" [(ngModel)]="betting_amount" min="1" [max]="settings.max_stake" (change)="calc_betting()" />
+                                                    <label class="mb-0">{{betting_amount}}</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <label class="mb-0">Odd:</label>
+                                                    <h6 class="mb-0">{{odds}}</h6>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <label class="mb-0">APL:</label>
+                                                    <label class="mb-0" *ngIf="betting_mode=='direct'">{{betting_apl_direct}}</label>
+                                                    <label class="mb-0" *ngIf="betting_mode=='permutation'">{{betting_apl_permutation}}</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <label class="mb-0">Win:</label>
+                                                    <label class="mb-0" *ngIf="betting_mode=='direct'">{{betting_win_direct}}</label>
+                                                    <label class="mb-0" *ngIf="betting_mode=='permutation'">{{betting_win_permutation}}</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <label class="mb-0">Gain:</label>
+                                                    <label class="mb-0" *ngIf="betting_mode=='direct'">{{betting_gain_direct}}</label>
+                                                    <label class="mb-0" *ngIf="betting_mode=='permutation'">{{betting_gain_permutation}}</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div *ngIf="betting_mode=='direct'" class="d-flex justify-content-between">
+                                                    <label class="mb-0">Bonus:</label>
+                                                    <label class="mb-0">{{bonus_percent}} %</label>
+                                                    <label class="mb-0">{{betting_bonus_direct}}</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="mb-0">Total win:</h6>
+                                                    <h6 class="mb-0" *ngIf="betting_mode=='direct'">{{betting_tot_win_direct}}</h6>
+                                                    <h6 class="mb-0" *ngIf="betting_mode=='permutation'">{{betting_tot_win_permutation}}</h6>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-around mt-2 mb-2">
+                                <!-- <button class="btn btn-sm btn-outline-inverse w-100p" (click)="on_make_book()" [disabled]="!can_make_bet()"><i class="fa fa-save"></i> Book</button> -->
+                                <button class="btn btn-sm btn-outline-inverse w-100p" (click)="on_make_book()"><i class="fa fa-save"></i> Book</button>
+                                <button class="btn btn-sm btn-outline-inverse w-100p" (click)="game_datas=[];"><i class="fa fa-trash-o"></i> Delete</button>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <!-- <button class="btn btn-warning w-100p" (click)="on_make_bet()" [disabled]="!can_make_bet()"><i class="fa fa-check-square-o"></i> Confirm</button> -->
+                                <button class="btn btn-warning w-100p" (click)="on_make_bet()"><i class="fa fa-check-square-o"></i> Confirm</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card box-shadow">
+                <div class="card-header">
+                    <h6 class="mb-0">COUPON SEARCH</h6>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="form-area">
+                        <div class="input-group  input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0">
+                                Bet Id:
+                            </span>
+                            </div>
+                            <input class="form-control border-0" placeholder="Search by betid.." type="text">
+                            <span class="input-group-append"><button class="btn btn-warning" type="button"><i
+                                    class="fa fa-search"></i></button></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card box-shadow">
+                <div class="card-header">
+                    <h6 class="mb-0">AUTOMATIC BET</h6>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="form-area">
+                        <div class="input-group  input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0  w-100p" style="width: 72px;">
+                                Amount:
+                            </span>
+                            </div>
+                            <input class="form-control border-0" placeholder="How much do you want to bet?" type="text">
+                            <span class="input-group-text"><i class="fa fa-money"></i></span>
+                        </div>
+                        <div class="input-group input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0" style="width: 72px;">
+                                Events:
+                            </span>
+                            </div>
+                            <input class="form-control border-0" placeholder="How many events?" type="text">
+                            <span class="input-group-text"><i class="fa fa-money"></i></span>
+                        </div>
+
+                        <div class="input-group input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0" style="width: 72px;">
+                                Wins:
+                            </span>
+                            </div>
+                            <input class="form-control border-0" placeholder="How much do you want to win?" type="text">
+                            <span class="input-group-text"><i class="fa fa-money"></i></span>
+                        </div>
+
+                        <div class="text-right">
+                            <button class="btn btn-warning w-100p mb-1 mr-1" type="button">Calculate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card box-shadow">
+                <div class="card-header">
+                    <h6 class="mb-0">BET BOOKED</h6>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="form-area">
+                        <div class="text-center">
+                            <p class="text-left fs-13 text-gray">Type in booked bet id to load it in your cart</p>
+                        </div>
+                        <div class="input-group input-group-sm mb-1 box-shadow">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text border-top-0 border-left-0 border-bottom-0">
+                                Bet Id:
+                            </span>
+                            </div>
+                            <input class="form-control border-0" placeholder="" type="number" [(ngModel)]="book_id">
+                        </div>
+
+                        <div class="text-right">
+                            <button class="btn btn-warning mb-1 mr-1" type="button" (click)="on_get_book()">Recalculate Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card box-shadow">
+                <div class="card-header">
+                    <h6 class="mb-0">LATEST MATCHES</h6>
+                    <div class="widget-controls p-0">
+                        <input _ngcontent-mqd-c11="" class="w-50p mt-2 mr-2 text-center" type="number" style="border: 1px;
+                            border-radius: 2px;color: white;background-color: #fe970082;" min="5" max="50" [(ngModel)]="latest_matches_count" (change)="refresh_latest_matches()">
+                    </div>
+                </div>
+
+                <div class="card card-outline-warning game-data" *ngFor="let ev of latest_matches">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h6><span class="mr-1"><app-sport-icon [key]="ev.sport_key"></app-sport-icon></span>{{ev.qbet}}</h6>
+                            <h6>{{ev.home_team}} - {{ev.away_team}}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <label class="mb-0">{{datetimeService.format(ev.datetime)}}</label>
+                            <label class="badge badge-success mb-0">{{ev.ft_result[0]}} : {{ev.ft_result[1]}}</label>
+                            <i class="fa fa fa-commenting-o text-danger" style="cursor: pointer;" (click)="on_view_latest_match(ev, latestMatchResultModalContent)"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<ng-template #printOddsModalContent>
+    <div class="modal-body bg-gray">
+        <div class="row">
+            <div class="col-12">
+                <!-- <form [formGroup]="printOddForm" (ngSubmit)="onOddSubmit(printOddForm.value)"> -->
+                <div class="card border-0 box-shadow">
+                    <div class="card-header card-header transparent border-0 text-muted">
+                        <h5 class="mb-0">Printing Odds</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Select Time</h6>
+                        <select class="form-control bg-warning" [(ngModel)]="print_day">
+                            <option value="today">Today</option>
+                            <option value="tomorrow">Tomorrow</option>
+                            <option value="all">All</option>
+                        </select>
+
+                        <h6 class="mt-1">Select Sports</h6>
+                        <div>
+                            <ss-multiselect-dropdown class="custom-multiselect" [options]="print_sports" [texts]="print_sport_texts" [settings]="print_sport_setting" [(ngModel)]="print_sport_model"></ss-multiselect-dropdown>
+                        </div>
+
+                        <h6 class="mt-1">Select Option Groups</h6>
+                        <div>
+                            <ss-multiselect-dropdown class="custom-multiselect" [options]="print_opt_groups" [texts]="print_opt_group_texts" [settings]="print_sport_setting" [(ngModel)]="print_opt_group_model"></ss-multiselect-dropdown>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-success mr-1" (click)="on_print_odds()"><span>Print</span></button>
+                        <button type="button" class="btn btn-danger" (click)="on_close_print_odds_modal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #ticketModalContent>
+    <app-ticket-print [bet]="last_bet" [bet_results]="last_bet_results" [userInfo]="cacheService.getUser()"></app-ticket-print>
+</ng-template>
+
+<ng-template #betResultModalContent>
+    <div class="modal-body bg-gray">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 box-shadow">
+                    <div class="card-header card-header transparent border-0 text-muted">
+                        <h5 class="mb-0">Betting result</h5>
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-success mr-1" (click)="on_print_odds()"><span>Print</span></button>
+                        <button type="button" class="btn btn-danger" (click)="on_close_print_odds_modal()">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+<ng-template #fullOptionModalContent>
+    <div class="card border-0 box-shadow rounded-0">
+        <div class="card-header text-center">
+            <h6>Options</h6>
+            <div class="widget-controls">
+                <i class="fa fa-times" style="cursor: pointer;" (click)="modalRef.close()"></i>
+            </div>
+        </div>
+        <div class="card-body text-center">
+            <div style="height: 460px; overflow-y: scroll; border: 1px solid rgba(157, 157, 157, 0.7);">
+                <div *ngFor="let opt_grp of quick_option_groups">
+                    <ul class="list-group" *ngIf="get_valid_options_countin_group(normal_selected_event, opt_grp) > 0">
+                        <li class="list-option-group-item d-flex justify-content-center">{{opt_grp.name}}</li>
+                        <li *ngFor="let opt of opt_grp.options;" class="list-option-group-item d-flex justify-content-between align-items-center" style="cursor: pointer;" [ngClass]="{'list-option-group-item-active': is_played(normal_selected_event, opt.id)}" (click)="on_play_event(normal_selected_event, opt); modalRef.close();">{{opt.name}}<span class="badge badge-pill badge-primary">{{get_option_value(normal_selected_event, opt)}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+<ng-template #latestWinResultModalContent>
+    <div class="card border-0 box-shadow rounded-0">
+        <div class="card-header text-center">
+            <h6>BET DETAIL</h6>
+            <div class="widget-controls">
+                <i class="fa fa-times" style="cursor: pointer;" (click)="modalRef.close()"></i>
+            </div>
+        </div>
+        <div class="card-body bet-result p-1">
+            <div style="height: 460px; overflow-y: scroll; border: 1px solid rgba(157, 157, 157, 0.7);">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th>Ticket Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>Events in coupon:</b>
+                                            <label>7</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>Amount:</b>
+                                            <label>100.00</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>Under:</b>
+                                            <label>4</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>Win:</b>
+                                            <label>3411.27</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>Bonus:</b>
+                                            <label>0</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>Total win:</b>
+                                            <label>3786</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-striped table-sm mb-0">
+                            <thead style="background-color: grey;">
+                                <tr>
+                                    <th>Detail Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>Result:</b>
+                                            <label>won</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <b>played on:</b>
+                                            <label>12/08/20 14:34</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <table class="table table-striped table-sm mb-0">
+                    <thead style="background-color: grey;">
+                        <tr>
+                            <th>Match</th>
+                            <th>Sign</th>
+                            <th>Odd</th>
+                            <th>Expire</th>
+                            <th>V</th>
+                            <th>R</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>St Mirren FC - Celtic Glasgow</td>
+                            <td>2 (1X2)</td>
+                            <td>1.00</td>
+                            <td>12/08/20 18:00</td>
+                            <td>1-1</td>
+                            <td><i class="fa fa-check-circle text-info"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #latestMatchResultModalContent>
+    <div class="card border-0 box-shadow rounded-0">
+        <div class="card-header text-center">
+            <h6><span class="mr-1"><app-sport-icon [key]="latest_matche.sport_key"></app-sport-icon></span> MATCH DETAIL</h6>
+            <div class="widget-controls">
+                <i class="fa fa-times" style="cursor: pointer;" (click)="modalRef.close()"></i>
+            </div>
+        </div>
+        <div class="card-body bet-result p-1">
+            <div style="height: 460px; overflow-y: scroll; border: 1px solid rgba(157, 157, 157, 0.7);">
+                <div class="text-center">
+                    <b class="text-info mt-1">Details</b>
+                </div>
+                <table class="table table-striped table-sm mb-0">
+                    <thead style="background-color: grey;">
+                        <tr hidden>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Qbet</th>
+                            <td>{{latest_matche.qbet}}</td>
+                            <th>Expire</th>
+                            <td>{{latest_matche.date}} {{latest_matche.time}}</td>
+                        </tr>
+                        <tr>
+                            <th>Match</th>
+                            <td>{{latest_matche.home_team}} - {{latest_matche.away_team}}</td>
+                            <th>League</th>
+                            <td>{{latest_matche.league}}</td>
+                        </tr>
+                        <tr>
+                            <th>HT Result</th>
+                            <td><label class="badge badge-info">{{latest_matche.ht_result[0]}} : {{latest_matche.ht_result[1]}}</label></td>
+                            <th>FT Result</th>
+                            <td><label class="badge badge-success">{{latest_matche.ft_result[0]}} : {{latest_matche.ft_result[1]}}</label></td>
+                        </tr>
+                        <tr>
+                            <th>Conners</th>
+                            <td><label class="badge badge-primary">{{latest_matche.conners[0]}} : {{latest_matche.conners[1]}}</label></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-center">
+                    <b class="text-info mt-1">Goals</b>
+                </div>
+                <table class="table table-striped table-sm mb-0">
+                    <thead style="background-color: grey;">
+                        <tr>
+                            <th>Player</th>
+                            <th>Team</th>
+                            <th>Time</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let goal of latest_matche.goals">
+                            <td>{{goal.competitor}}</td>
+                            <td>{{goal.player}}</td>
+                            <td>{{goal.time}}'</td>
+                            <td>{{goal.type}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <div class="text-center">
+                    <b class="text-info mt-1">Cards</b>
+                </div>
+                <table class="table table-striped table-sm mb-0">
+                    <thead style="background-color: grey;">
+                        <tr>
+                            <th>Player</th>
+                            <th>Team</th>
+                            <th>Time</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let card of latest_matche.cards">
+                            <td>{{card.competitor}}</td>
+                            <td>{{card.player}}</td>
+                            <td>{{card.time}}'</td>
+                            <td><span class="badge badge-pill" [ngClass]="{'badge-warning': card.type=='yellow', 'badge-danger': card.type=='red'}">{{card.type}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</ng-template>

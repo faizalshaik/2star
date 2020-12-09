@@ -1,0 +1,245 @@
+<h5>Bet Report</h5>
+<div class="card">
+    <div class="card-header page-card-header">
+        <h6 class="mt-1">Filter</h6>
+    </div>
+    <table class="table-sm table-hover table-striped w-100">
+        <thead>
+            <tr>
+                <th width="12%"></th>
+                <th width="30%"></th>
+                <th width="12%"></th>
+                <th width="30%"></th>
+                <th width="16%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-right">Date from:</td>
+                <td><input class="" type="datetime-local" [(ngModel)]="date_from"></td>
+                <td class="text-right">to:</td>
+                <td><input class="" type="datetime-local" [(ngModel)]="date_to"></td>
+                <td>
+                    <button class="btn btn-sm btn-info" (click)="expanded_filter=!expanded_filter;">
+                        <i *ngIf="!expanded_filter" class="fa fa-plus mr-1"></i>
+                        <i *ngIf="expanded_filter" class="fa fa-minus mr-1"></i>
+                        Other options</button>
+                </td>
+            </tr>
+
+            <tr *ngIf="expanded_filter">
+                <td class="text-right">Option:</td>
+                <td>
+                    <select [(ngModel)]="option">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let op of options" [value]="op.id">{{op.name}}</option>
+                    </select>
+                </td>
+                <td class="text-right">Operator:</td>
+                <td>
+                    <select [(ngModel)]="operator" (change)="on_change_operator()">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let op of operators" [value]="op.id">{{op.login}}</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox checkbox-circle">
+                        <input class="custom-control-input checkbox-dark-gray" [(ngModel)]="state_void" id="checkbox_void" type="checkbox"><label class="custom-control-label" for="checkbox_void">Void</label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr *ngIf="expanded_filter">
+                <td class="text-right">Qbet:</td>
+                <td>
+                    <input type="number" [(ngModel)]="qbet">
+                </td>
+                <td class="text-right">Agency:</td>
+                <td>
+                    <select [(ngModel)]="agency" (change)="on_change_agency()">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let ag of agencies" [value]="ag.id">{{ag.login}}</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox checkbox-circle">
+                        <input class="custom-control-input checkbox-primary" [(ngModel)]="state_in_progress" id="checkbox_in_progress" type="checkbox"><label class="custom-control-label" for="checkbox_in_progress">In progress</label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr *ngIf="expanded_filter">
+                <td class="text-right">Bet Id:</td>
+                <td>
+                    <input type="number" [(ngModel)]="betid">
+                </td>
+                <td class="text-right">User:</td>
+                <td>
+                    <select [(ngModel)]="user">
+                        <option [value]="0">Any</option>
+                        <option *ngFor="let usr of users" [value]="usr.id">{{usr.login}}</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox checkbox-circle">
+                        <input class="custom-control-input checkbox-danger" [(ngModel)]="state_lost" id="checkbox_lost" type="checkbox"><label class="custom-control-label" for="checkbox_lost">Lost</label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr *ngIf="expanded_filter">
+                <td class="text-right">Multiplicity:</td>
+                <td>
+                    <input type="number" class="w-50p" [(ngModel)]="events_min"> ~
+                    <input type="number" class="w-50p" [(ngModel)]="events_max">
+                </td>
+                <td class="text-right">Type of bets:</td>
+                <td>
+                    <select [(ngModel)]="type">
+                        <option value="">Any</option>
+                        <option value="Direct">Direct</option>
+                        <option value="Permutation">Permutation</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox checkbox-circle">
+                        <input class="custom-control-input checkbox-success" [(ngModel)]="state_won" id="checkbox_won" type="checkbox"><label class="custom-control-label" for="checkbox_won">Won</label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr *ngIf="expanded_filter">
+                <td class="text-right">Amount at least:</td>
+                <td>
+                    <input type="number" [(ngModel)]="amount_min">
+                </td>
+                <td class="text-right">Payout at least:</td>
+                <td>
+                    <input type="number" [(ngModel)]="payout_min">
+                </td>
+                <td>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-right">View from:</td>
+                <td>
+                    <input type="number" [(ngModel)]="view_from">
+                </td>
+                <td class="text-right">to N:</td>
+                <td>
+                    <input type="number" [(ngModel)]="view_count">
+                </td>
+                <td>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="card-footer d-flex justify-content-center">
+        <button class="btn btn-outline-info btn-sm mr-2" (click)="on_search()">
+            <i class="fa fa-search mr-1"></i>Search</button>
+        <!-- <button class="btn btn-outline-info btn-sm" (click)="openModal(modalContent, null)"><i class="fa fa-plus mr-1"></i>Add new</button> -->
+    </div>
+</div>
+
+<div class="card mt-2">
+    <table class="table table-sm table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Number of bets</th>
+                <th>Total played</th>
+                <th>Max winnings</th>
+                <th>Void</th>
+                <th>Void amount</th>
+                <th>Total won</th>
+                <th>Net</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let day of days">
+                <td>{{day.date}} {{day.day}}</td>
+                <td>{{day.bets_count}}</td>
+                <td>₦ {{day.total_amount}}</td>
+                <td>₦ {{day.total_max_win}}</td>
+                <td>{{day.void_count}}</td>
+                <td>₦ {{day.total_void}}</td>
+                <td>₦ {{day.total_won}}</td>
+                <td>₦ {{day.total_net}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white text-center">
+            <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="10"></pagination-controls>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="sumarry" class="row mt-2">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header page-card-header">
+                <h6 class="mt-1">Total calcuated by date ( {{sumarry.total_bets_count}} Bets )</h6>
+            </div>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th class="width 60%"></th>
+                        <th class="width 40%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total played</td>
+                        <td>₦ {{sumarry.total_amount}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Max win </td>
+                        <td>₦ {{sumarry.total_max_win}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total void</td>
+                        <td>₦ {{sumarry.total_void}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total won</td>
+                        <td>₦ {{sumarry.total_won}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total net</td>
+                        <td>₦ {{sumarry.total_net}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card border-0 box-shadow">
+            <div class="card-body widget-body pr-5">
+                <div class="w-100" style="height: 180px;">
+                    <ngx-charts-bar-horizontal [scheme]="colorScheme" [results]="result" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="false" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="yAxisLabel" [yAxisLabel]="xAxisLabel">
+                    </ngx-charts-bar-horizontal>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 box-shadow">
+            <div class="card-body widget-body pr-5">
+                <div class="w-100" style="height: 180px;">
+                    <ngx-charts-pie-chart [scheme]="colorScheme" [results]="result_play_void" [legend]="false" [explodeSlices]="explodeSlices" [labels]="true" [doughnut]="doughnut" [gradient]="gradient">
+                    </ngx-charts-pie-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
